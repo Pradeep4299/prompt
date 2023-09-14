@@ -1,0 +1,21 @@
+{
+    "firstName":"pradeep",
+    "lastName":"kumar",
+    "city":"Paris",
+    "country":"Europe",
+    "orderHistory":[{
+    "title":"Logitech g402 Gaming mouse",
+    "price":300
+},
+{
+    "title":"Redragon Keyboard",
+    "price":200
+},{
+    "title":"JBL headsets",
+    "price":300
+},
+{
+    "title":"Creative Bass speakers",
+    "price":300
+}]
+}

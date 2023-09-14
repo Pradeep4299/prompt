@@ -12,6 +12,7 @@ const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
 });
 app.get("/customer-behavior/v1", async (req, res) => {
+  //Takes more tokens //
   const { firstName, lastName, city, country, orderHistory } = req.body;
   const messages = [
     {
@@ -48,6 +49,7 @@ app.get("/customer-behavior/v1", async (req, res) => {
 });
 
 app.get("/customer-behavior/v2", async (req, res) => {
+  //“Included a line in prompt making the AI to read and understand the title property and give a tailored response” //
   const { firstName, lastName, city, country, orderHistory } = req.body;
   const messages = [
     {
@@ -667,44 +669,137 @@ app.get("/sms", async (req, res) => {
   console.log(chalk.green(JSON.stringify(result)));
 });
 
-app.get("/promptengine", async (req, res) => {
-  const { firstName, lastName, orders } = req.query;
-  const description = `Generate a customer profile for ${firstName} ${lastName} including  about their behavior based on order history${orders}`;
-  const examples = [
-    {
-      input: `Customer name: ${firstName} ${lastName}. 
-            orderHistory:${orders}
-          `,
-      response: `${firstName} ${lastName} is a most valuable customer who buys ${orders} more frequently and his interest lies in the area of interest`,
-    },
-  ];
+app.get('/finetune-job-creation',async (req,res)=>{
 
-  const codeEngine = new CodeEngine(description, examples, "", {
-    modelConfig: { maxTokens: 10000 },
+  //create and upload the file
+  const response = await openai.files.create({ file: fs.createReadStream('fineTune.jsonl'), purpose: 'fine-tune' });
+  const fileId = response.id;
+
+  //looping and waiting until the file gets uploaded
+  while (true) {
+    const info = await openai.files.retrieve(fileId);
+    const status = info.status;
+    if (status == 'uploaded') {
+      await sleep(10000);
+      continue; // sleep for 10 seconds
+    } else if (status == 'processed') {
+      console.log("status: ",status);
+      break;
+    } else if (status == 'failed') {
+    console.log('The file failed to process.');
+    break;
+    }
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    //creating the job which will be the custom trained model
+    const fineTune = await openai.fineTuning.jobs.create({
+  training_file: fileId,
+  model: 'gpt-3.5-turbo-0613'
   });
 
-  const query = `Customer name: ${firstName} ${lastName}. 
-            orderHistory:${orders}
-          `;
-  const prompt = codeEngine.buildPrompt(query);
+  const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune.id);
+  console.log("full job: ",fineTuneJob);
 
+  console.log("fine tuned model name : ", fineTuneJob.fine_tuned_model);
+  res.json({fileId, fineTuneJob})
+})
+
+app.get("/finetune-content-generation", async (req, res) => {
+  const { firstName, lastName, city, country, orderHistory } = req.body;
+
+  let fileId=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_FILE_ID
+  let fineTune=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_JOB_ID
+ 
+  const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune);
+  let messages= [{ role: "user", content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country},Order History:${JSON.stringify(
+    orderHistory
+  )}` }]
   const completion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are a data analyst providing insights on customer behavior.",
-      },
-      {
-        role: "user",
-        content: prompt,
-      },
-    ],
-    model: "gpt-3.5-turbo",
+    messages,
+    model: process.env.FINE_TUNE_CUSTOMER_FINE_TUNED_MODEL,
   });
-
-  res.send(completion.choices[0].message.content);
+  
+  console.log(chalk.yellow(JSON.stringify(messages)));
+  const result = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(result);
 });
+
+
 app.listen(3000, () => {
   console.log(`Server listening on port 3000`);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// app.get("/promptengine", async (req, res) => {
+//   const { firstName, lastName, orders } = req.query;
+//   const description = `Generate a customer profile for ${firstName} ${lastName} including  about their behavior based on order history${orders}`;
+//   const examples = [
+//     {
+//       input: `Customer name: ${firstName} ${lastName}. 
+//             orderHistory:${orders}
+//           `,
+//       response: `${firstName} ${lastName} is a most valuable customer who buys ${orders} more frequently and his interest lies in the area of interest`,
+//     },
+//   ];
+
+//   const codeEngine = new CodeEngine(description, examples, "", {
+//     modelConfig: { maxTokens: 10000 },
+//   });
+
+//   const query = `Customer name: ${firstName} ${lastName}. 
+//             orderHistory:${orders}
+//           `;
+//   const prompt = codeEngine.buildPrompt(query);
+
+//   const completion = await openai.chat.completions.create({
+//     messages: [
+//       {
+//         role: "system",
+//         content:
+//           "You are a data analyst providing insights on customer behavior.",
+//       },
+//       {
+//         role: "user",
+//         content: prompt,
+//       },
+//     ],
+//     model: "gpt-3.5-turbo",
+//   });
+
+//   res.send(completion.choices[0].message.content);
+// });
+
