@@ -518,7 +518,7 @@ app.get("/email-generation", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Email Marketing Software Service, Your objective is to create an email for my personalized email marketing campaign to the customers of my shop based on the below prompt.The email should be in the below mentioned tone.Include the email's subject line's client name and context. Keep the email body short not more than ${length} words and respond in the same format as in "assistant" role content. Do not include any promo codes on your own. If I offer a discount code, please highlight it in the email context in bold letters.Remember not to use any SPAM words in subject or body`,
+      content: `As an Email Marketing Software Service, Your objective is to create an email for my personalized email marketing campaign to the customers of my shop based on the below prompt.The email should be in the below mentioned tone.Include the email's subject line's client name and context. Keep the email body short not to exceed the given number of words and respond in the same format as in "assistant" role content. Do not include any promo codes on your own. If I offer a discount code, please highlight it in the email context in bold letters.Remember not to use any SPAM words in subject or body`,
     },
     {
       role: "user",
@@ -544,6 +544,7 @@ app.get("/email-generation", async (req, res) => {
     model: "gpt-3.5-turbo-0613",
   });
   const result = {
+    role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
     completion_tokens: completion.usage.completion_tokens,
@@ -680,10 +681,12 @@ app.get('/finetune-job-creation',async (req,res)=>{
     const info = await openai.files.retrieve(fileId);
     const status = info.status;
     if (status == 'uploaded') {
+      console.log("status: ",status);
       await sleep(10000);
       continue; // sleep for 10 seconds
     } else if (status == 'processed') {
       console.log("status: ",status);
+      console.log("File uploaded successfully");
       break;
     } else if (status == 'failed') {
     console.log('The file failed to process.');
@@ -696,19 +699,63 @@ app.get('/finetune-job-creation',async (req,res)=>{
     }
 
     //creating the job which will be the custom trained model
+    console.log("creating Job");
     const fineTune = await openai.fineTuning.jobs.create({
   training_file: fileId,
   model: 'gpt-3.5-turbo-0613'
   });
 
   const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune.id);
-  console.log("full job: ",fineTuneJob);
-
+  console.log("full job: ",fineTuneJob); // see if the status is succeeded, or else wait for some time so that it will get changed and it will give u the trained model name.
+while(true){
+  if(fineTuneJob.fine_tuned_model || fineTuneJob.status == 'succeeded'){
+    console.log("custom model is ready to use");
+    break;
+  }
+  console.log("custom model status: ",fineTuneJob.status);
+  console.log("waiting for custom model to get created");
+  await sleep(10000);
+  continue;
+}
   console.log("fine tuned model name : ", fineTuneJob.fine_tuned_model);
-  res.json({fileId, fineTuneJob})
+  res.json({status:"Successfully created a job",fileId,jobId:fineTune.id, fineTuneJob})
 })
 
-app.get("/finetune-content-generation", async (req, res) => {
+app.get('/finetune-status',async (req,res)=>{
+  const {jobId}=req.query;
+  const fineTuneJob = await openai.fineTuning.jobs.retrieve(jobId);
+  console.log("full job: ",fineTuneJob);
+  res.json({jobId, fineTuneJob})
+})
+
+app.get("/finetune-customer-behavior-generation", async (req, res) => {
+  const { firstName, lastName, city, country, orderHistory } = req.body;
+
+  let fileId=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_FILE_ID
+  let fineTune=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_JOB_ID
+ 
+  const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune);
+  let messages= [{ role: "user", content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country},Order History:${JSON.stringify(
+    orderHistory
+  )}` }]
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: process.env.FINE_TUNE_CUSTOMER_FINE_TUNED_MODEL,
+  });
+  
+  console.log(chalk.yellow(JSON.stringify(messages)));
+  const result = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(result);
+});
+
+app.get("/finetune-email-generation", async (req, res) => {
   const { firstName, lastName, city, country, orderHistory } = req.body;
 
   let fileId=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_FILE_ID
