@@ -1,8 +1,8 @@
 import express from "express";
 import OpenAI from "openai";
 import { config } from "dotenv";
-import { CodeEngine } from "prompt-engine";
 import chalk from "chalk";
+import fs from 'fs'
 config();
 const app = express();
 app.use(express.json());
@@ -673,7 +673,7 @@ app.get("/sms", async (req, res) => {
 app.get('/finetune-job-creation',async (req,res)=>{
 
   //create and upload the file
-  const response = await openai.files.create({ file: fs.createReadStream('fineTune.jsonl'), purpose: 'fine-tune' });
+  const response = await openai.files.create({ file: fs.createReadStream('fine-tune-email.jsonl'), purpose: 'fine-tune' });
   const fileId = response.id;
 
   //looping and waiting until the file gets uploaded
@@ -705,9 +705,10 @@ app.get('/finetune-job-creation',async (req,res)=>{
   model: 'gpt-3.5-turbo-0613'
   });
 
+   while(true){
+    // see if the status is succeeded, or else wait for some time so that it will get changed and it will give u the trained model name.
   const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune.id);
-  console.log("full job: ",fineTuneJob); // see if the status is succeeded, or else wait for some time so that it will get changed and it will give u the trained model name.
-while(true){
+  console.log("full job: ",fineTuneJob);
   if(fineTuneJob.fine_tuned_model || fineTuneJob.status == 'succeeded'){
     console.log("custom model is ready to use");
     break;
@@ -756,18 +757,30 @@ app.get("/finetune-customer-behavior-generation", async (req, res) => {
 });
 
 app.get("/finetune-email-generation", async (req, res) => {
-  const { firstName, lastName, city, country, orderHistory } = req.body;
+  const {
+    contextForEmail,
+    shopDomain,
+    first_name,
+    last_name,
+    customer_behavior,
+    product_offering,
+    shop_name,
+    coupon,
+    tone,
+    length,
+    keywords,
+  } = req.body;
 
-  let fileId=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_FILE_ID
-  let fineTune=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_JOB_ID
+  let fileId=process.env.FINE_TUNE_EMAIL_FILE_ID
+  let fineTune=process.env.FINE_TUNE_EMAIL_JOB_ID
  
-  const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune);
-  let messages= [{ role: "user", content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country},Order History:${JSON.stringify(
-    orderHistory
-  )}` }]
+  let messages= [{
+    role: "user",
+    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
+  }]
   const completion = await openai.chat.completions.create({
     messages,
-    model: process.env.FINE_TUNE_CUSTOMER_FINE_TUNED_MODEL,
+    model: process.env.FINE_TUNE_EMAIL_FINE_TUNED_MODEL,
   });
   
   console.log(chalk.yellow(JSON.stringify(messages)));
