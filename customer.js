@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { config } from "dotenv";
 import chalk from "chalk";
 import fs from 'fs'
+import { CodeEngine } from "prompt-engine";
 config();
 const app = express();
 app.use(express.json());
@@ -522,20 +523,20 @@ app.get("/email-generation", async (req, res) => {
     },
     {
       role: "user",
-      content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
+      content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} , the products list from shop description and do not exceed ${length} words. Notes: In the end include the shop name.`,
     },
     {
       role: "assistant",
-      content: `{"subject": "Black Friday sale for Pradeep Kumar","body": "Hello Pradeep Kumar,Wishing you a Happy Diwali as bright as your gaming skills! We couldn't help but notice your fantastic taste in gaming accessories and electronics. From your shopping history you're clearly a gaming aficionado!. 
-        This Diwali, we have some electrifying news for you. But that's not all! Our shop is a treasure trove of gaming goodness. Here are some more items we think you'll love,
-        1. Corsair Gaming Mouse: For precise control in every game.
-        2. Logitech Keyboard with RGB red switch: A keyboard that matches your gaming intensity. 
-        3. Red Gear Gaming Headset: Immerse yourself in stunning surround sound.
-        4. NVME SSD: Speed up your gaming with lightning-fast storage.
-        These are just a taste of what we have to offer. Visit our website at www.tagbot.myshopify.com to explore our full range of products and take your gaming to the next level. Wishing you a joyful Diwali filled with wins, power-ups, and high scores! 
-        Warm regards,
-        Tagbot Gaming Shop"
-        }`,
+      content: `{"subject": "🎉 Black Friday sale for Pradeep Kumar 🎉","body": "Hello Pradeep Kumar, 🎉 Wishing you a Happy Diwali as bright as your gaming skills! 🕹️ We couldn't help but notice your fantastic taste in gaming accessories and electronics. 🎮 From your shopping history, you're clearly a gaming aficionado! 🎮.
+        This Diwali, we have some electrifying news for you. ⚡ But that's not all! Our shop is a treasure trove of gaming goodness. 🎁 Here are some more items we think you'll love,
+        1. 🖱️ Corsair Gaming Mouse
+        2. ⌨️ Logitech Keyboard with RGB red switch
+        3. 🎧 Red Gear Gaming Headset
+        4. 💽 NVME SSD and many more. 💽
+        These are just a taste of what we have to offer. Visit our website at www.tagbot.myshopify.com to explore our full range of products and take your gaming to the next level. 🌐 Wishing you a joyful Diwali filled with wins, power-ups, and high scores! 🏆
+        Warm regards, 🎮
+        Tagbot Gaming Shop 🎮"
+      }`,
     },
   ];
 
@@ -573,7 +574,7 @@ app.get("/whatsapp-message", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Advertising Copywriter, i need you to generate whatsapp marketing campaign for my customers based on the below prompt.The content should be in the below mentioned tone.Include the text's subject line's client name and context. Keep the content body short upto 50 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the context in bold letters. Remember not to use any SPAM words in subject or body`,
+      content: `As an Advertising Copywriter, i need you to generate whatsapp marketing campaign for my customers based on the below prompt.The content should be in the below mentioned tone.Include the text's subject line's client name and context. Keep the content body short upto 70 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the context in bold letters. Remember not to use any SPAM words in subject or body`,
     },
     {
       role: "user",
@@ -584,16 +585,10 @@ app.get("/whatsapp-message", async (req, res) => {
       content: `{"greetings":"Hey Emma Mackey! 👋", "subject": "Halloween sale is here Emma Mackey" ,"body" : "🎮🔥 Tagbot Gaming Shop 🔥🎮
        
       With Halloweeen approaching, we have some exciting offers exclusively for you!
-      We've curated an exclusive selection of gaming and electronics products tailored just for you:
-      🖱️ Corsair Gaming Mouse: Dominate the virtual battlefield with precision and style.
-      ⌨️ Logitech Keyboard with RGB Red Switch: Enjoy lightning-fast keystrokes and customizable RGB lighting.
-      🎧 Red Gear Gaming Headset: Immerse yourself in a world of stunning audio, making every game come to life.
-      💽 NVME SSD: Need more storage? Say goodbye to lag with blazing-fast data access.
-      ❄️ Cooler Master Aircooler: Keep your CPU cool under pressure, ensuring smooth gameplay.
+      We've curated an exclusive selection of gaming and electronics products tailored just for you: 🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, ❄️ Cooler Master Aircooler.
       
-Explore these top-notch products at www.tagbot.myshopify.com and take your gaming experience to new heights!
-Wherever you are in Europe, Tagbot Gaming Shop has you covered. Get ready to elevate your gaming! 🎮✨Happy gaming, Emma! 🚀
-Best regards,
+      Explore these top-notch products at www.tagbot.myshopify.com and Wherever you are in Europe, Tagbot Gaming Shop has you covered. Get ready to elevate your gaming! 🎮✨Happy gaming, Emma! 🚀
+      Best regards,
       Tagbot Gaming Shop Team" }`,
     },
   ];
@@ -708,7 +703,7 @@ app.get('/finetune-job-creation',async (req,res)=>{
    while(true){
     // see if the status is succeeded, or else wait for some time so that it will get changed and it will give u the trained model name.
   const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune.id);
-  console.log("full job: ",fineTuneJob);
+  console.log("Model name",fineTuneJob.fine_tuned_model);
   if(fineTuneJob.fine_tuned_model || fineTuneJob.status == 'succeeded'){
     console.log("custom model is ready to use");
     break;
@@ -718,6 +713,7 @@ app.get('/finetune-job-creation',async (req,res)=>{
   await sleep(10000);
   continue;
 }
+console.log("full job object: ",fineTuneJob);
   console.log("fine tuned model name : ", fineTuneJob.fine_tuned_model);
   res.json({status:"Successfully created a job",fileId,jobId:fineTune.id, fineTuneJob})
 })
@@ -776,7 +772,7 @@ app.get("/finetune-email-generation", async (req, res) => {
  
   let messages= [{
     role: "user",
-    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
+    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" field containing what the campaign is about and "shop name" and "Customer name" in it, and "body" field should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
   }]
   const completion = await openai.chat.completions.create({
     messages,
@@ -795,6 +791,121 @@ app.get("/finetune-email-generation", async (req, res) => {
   res.send(result);
 });
 
+app.get("/prompt-engine-email-generation", async (req, res) => {
+  //configured with the tone, length and keywords fields//
+  const {
+    contextForEmail,
+    shopDomain,
+    first_name,
+    last_name,
+    customer_behavior,
+    product_offering,
+    shop_name,
+    coupon,
+    tone,
+    length,
+    keywords,
+  } = req.body;
+
+  const description = `As an Email Marketing Software Service, Your objective is to create an email for my personalized email marketing campaign to the customers of my shop based on the below prompt.The email should be in the below mentioned tone.Include the email's subject line's client name and context. Keep the email body short not to exceed the given number of words and respond in the same format as in "assistant" role content. Do not include any promo codes on your own. If I offer a discount code, please highlight it in the email context in bold letters.Remember not to use any SPAM words in subject or body`;
+
+  const examples = [
+       {
+          input:"Generate a marketing email for Customer Name: Sophia Williams for Halloween Sale, Customer Purchase History: Customer Sophia Williams, who is from London, UK, has a preference for luxury fashion items based on her order history. She has bought a Designer Leather Jacket, High-End Italian Leather Shoes, Silk Evening Gown, and Cashmere Sweater. Based on her purchases, it is clear that she has a taste for high-quality and stylish clothing. To target her preferences, advertisements or promotions for premium fashion brands, designer clothing, and accessories would be effective. Additionally, promotions for exclusive discounts or limited edition collections could also be appealing to her. Overall, Sophia Williams is a customer from London, UK, who is interested in luxury fashion items. and Products available in the shop: Introducing London Couture, the ultimate destination for exclusive designer clothing. Elevate your style with our exquisite collection of elegant evening dresses, tailored suits for men, designer handbags, luxury cashmere sweaters, and classy leather Oxford shoes. Each product is crafted with utmost care and attention to detail, ensuring a perfect fit and sophisticated look. Discover a world of high-end fashion and shop at www.londoncouture.myshopify.com to elevate your style to new heights. London Couture - Elevating your style with exclusive designer clothing. Coupon:FIRST20 Shop Website: www.londoncouture.myshopify.com Shop name: London Couture The email format should be in JSON object with \"subject\" property, which should include \"Diwali Sale\" and shop website (make it as hyperlink) and \"Customer name\" in it, and \"body\" property which should have the email context. NoteS: In the end include the shop name",
+          response:"{\"subject\": \"🎃 Halloween Sale for Sophia Williams 🎃\",\"body\": \"Hello Sophia Williams, 🎃 Get ready for a spooktacular Halloween sale at London Couture! 🕷️🎉 We know you have a taste for luxury fashion, and this sale is tailor-made for you. 👗👠 From exquisite designer leather jackets to high-end Italian leather shoes, silk evening gowns, and cashmere sweaters, we have everything you need to elevate your style. 💎✨\n\nThe Halloween Sale offers mind-blowing discounts on our entire collection of premium fashion brands, designer clothing, and accessories. 👜🔥 Don't miss out on these ultimate offers! 😱💸\n\nShop now at www.londoncouture.myshopify.com to discover the perfect additions to your wardrobe. 🛍️🌟 Hurry, the sale ends soon!\n\nLondon Couture - Elevating your style with exclusive designer clothing.\"}"},{
+          input: "Generate a marketing email based on the informative and professional tone for Customer Name: Michael Anderson for Black Friday Sale, Customer Description: Michael Anderson is interested in fitness and workout equipment as indicated by his purchase history. He has bought an Olympic Barbell Set, Adjustable Dumbbell Pair, Weight Bench with Rack, and Protein Powder. Based on this, it is clear that Michael is interested in fitness and weight lifting. Targeted advertisements or promotions that would likely appeal to him include gym memberships, weight training accessories such as lifting gloves or belts, workout clothing, and protein supplements. These recommendations would align with his interests and encourage him to continue investing in his fitness journey. Overall, Michael Anderson from Los Angeles, USA is interested in fitness and workout equipment. and Shop Description: Introducing LA Fitness Pro Shop, your go-to destination for all your fitness and sports gear needs in Los Angeles. Explore our wide range of products including professional treadmills, weightlifting sets, yoga mat and accessories kits, basketball gear packages, and top-quality running shoes. With LA Fitness Pro Shop, you can find everything you need to enhance your fitness routine and excel in your favorite sports. Visit us online at www.lafitnesspro.myshopify.com and start your journey towards a healthier and more active lifestyle today. Coupon Code : FIRST20 Shop Website: www.lafitnesspro.myshopify.com Shop name: LA Fitness Pro. The email format should be in JSON object with \"Subject\" should include what the campaign is about and \"shop name\" and \"Customer name\" in it, and \"body\" should have the email context with these keywords : Bumper offer, mind-blowing, ultimate offers and the products list from shop description. Notes: In the end include the shop name and do not exceed 150 words in the email context",
+          response:{"subject": "🎉 Ultimate Black Friday Sale for Michael Anderson 🎉",
+            "body": "Hello Michael Anderson, 🎉 We hope you're staying fit and healthy!. From your past purchases, it's clear that you're passionate about fitness and weightlifting. 💪\nWe're excited to announce our Bumper Black Friday Sale, exclusively for our valued customers like you. 🛍️ With mind-blowing discounts on a wide range of workout equipment and accessories, you can take your fitness routine to the next level!\nCheck out our fantastic offers:\n1. Olympic Barbell Set\n2. Adjustable Dumbbell Pair\n3. Weight Bench with Rack\n4. Protein Powder\nAnd more!\nJust for you, we're offering an extra 20% discount on your first purchase. Use the coupon code FIRST20 at checkout to avail of this special offer.\nDon't miss out on these amazing deals! Visit our website at www.lafitnesspro.myshopify.com to grab your favorite fitness gear at unbeatable prices.\nWishing you a healthy and active Black Friday!,\nLA Fitness Pro Shop 🏋️"}
+        }
+      ];
+
+      const codeEngine = new CodeEngine(description, examples, "", {
+            modelConfig: { maxTokens: 10000 },
+          });
+
+          const query = `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} , the products list from shop description and do not exceed ${length} words. Notes: In the end include the shop name.`
+          ;
+            const prompt = codeEngine.buildPrompt(query);
+          const messages= [
+            {
+              role: "system",
+              content:"As an Email Marketing Software Service, Your objective is to create an email for my personalized email marketing campaign to the customers of my shop based on the below prompt.The email should be in the below mentioned tone.Include the email's subject line's client name and context. Keep the email body short not to exceed the given number of words and respond in the same format as in \"assistant\" role content. Do not include any promo codes on your own. If I offer a discount code, please highlight it in the email context in bold letters.Remember not to use any SPAM words in subject or body",
+            },
+            {
+              role: "user",
+              content: prompt,
+            },
+            {
+              role: "assistant",
+              content: `{"subject": "🎉 Black Friday sale for Pradeep Kumar 🎉","body": "Hello Pradeep Kumar, 🎉 Wishing you a Happy Diwali as bright as your gaming skills! 🕹️ We couldn't help but notice your fantastic taste in gaming accessories and electronics. 🎮 From your shopping history, you're clearly a gaming aficionado! 🎮.
+                This Diwali, we have some electrifying news for you. ⚡ But that's not all! Our shop is a treasure trove of gaming goodness. 🎁 Here are some more items we think you'll love,
+                1. 🖱️ Corsair Gaming Mouse
+                2. ⌨️ Logitech Keyboard with RGB red switch
+                3. 🎧 Red Gear Gaming Headset
+                4. 💽 NVME SSD and many more. 💽
+                These are just a taste of what we have to offer. Visit our website at www.tagbot.myshopify.com to explore our full range of products and take your gaming to the next level. 🌐 Wishing you a joyful Diwali filled with wins, power-ups, and high scores! 🏆
+                Warm regards, 🎮
+                Tagbot Gaming Shop 🎮"
+              }`,
+            }
+
+          ]
+            const completion = await openai.chat.completions.create({
+              messages,
+              model: "gpt-3.5-turbo",
+            });
+  
+  const result = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  res.send(result);
+  console.log(chalk.red(JSON.stringify( messages)));
+  console.log(chalk.green(JSON.stringify(result)));
+});
+
+app.get("/finetune-whatsapp-message", async (req, res) => {
+  const {
+    contextForEmail,
+    shopDomain,
+    first_name,
+    last_name,
+    customer_behavior,
+    product_offering,
+    shop_name,
+    coupon,
+    tone,
+    length,
+    keywords,
+  } = req.body;
+
+  let fileId=process.env.FINE_TUNE_EMAIL_FILE_ID
+  let fineTune=process.env.FINE_TUNE_EMAIL_JOB_ID
+ 
+  let messages= [{
+    role: "user",
+    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" field containing what the campaign is about and "shop name" and "Customer name" in it, and "body" field should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
+  }]
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: process.env.FINE_TUNE_EMAIL_FINE_TUNED_MODEL,
+  });
+  
+  console.log(chalk.yellow(JSON.stringify(messages)));
+  const result = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(result);
+});
 
 app.listen(3000, () => {
   console.log(`Server listening on port 3000`);
