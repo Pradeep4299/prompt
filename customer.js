@@ -93,14 +93,14 @@ app.get("/customer-behavior/", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `You are a Data Analyst, you need to generate a customer overview and product preference analysis based on the information given in "user" role content. After thoroughly studying the details, first, identify what category of products the customer had bought by reading the "title" property and give me suggestions for targeted advertisements or promotions that would appeal to the customer's likings. Note: Ensure that generated content is informative and don't use the same products in the response, suggest relevant products and give the response in one paragraph and stick to the format given in "assistant" role content. Keep in mind: The generated content must contain an "Overall" paragraph at the end highlighting the customer's name, region, and the category of products that he is interested in so that it can be given as input to the AI model to generate content for marketing campaigns.
+      content: `As a data analyst, it is your responsibility to provide an overview of your target market and a study of their product preferences using the data from the "user" role content. Give me recommendations for targeted marketing or promotions that will appeal to the client's preferences after carefully examining the facts. To start, determine what category of items the consumer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, avoid using the same items again in a response, propose products that are relevant, keep your response to one paragraph, and follow the structure specified in the content for the "assistant" job. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a "Overall" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.
         `,
     },
     {
       role: "user",
       content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country},Order History:${JSON.stringify(
         orderHistory
-      )}`,
+      )} and do not provide product description and generate content in 60 words`,
     },
     {
       role: "assistant",
@@ -519,23 +519,24 @@ app.get("/email-generation", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Email Marketing Software Service, Your objective is to create an email for my personalized email marketing campaign to the customers of my shop based on the below prompt.The email should be in the below mentioned tone.Include the email's subject line's client name and context. Keep the email body short not to exceed the given number of words and respond in the same format as in "assistant" role content. Do not include any promo codes on your own. If I offer a discount code, please highlight it in the email context in bold letters.Remember not to use any SPAM words in subject or body`,
+      content: `As a Marketing manager, your goal is to craft an email for my personalized email marketing campaign to my shop's customers based on the prompt below. The email should adopt the tone described below. Please ensure to include the client's name and context in the subject line. Keep the email body concise, adhering to the specified word limit. Please respond in the same format as the 'assistant' role content. Do not include any coupon or promo codes independently. If a discount code is provided, please emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body, and incorporate emojis.`,
     },
     {
       role: "user",
-      content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} , the products list from shop description and do not exceed ${length} words. Notes: In the end include the shop name.`,
+      content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.For the email format, please create a JSON object. In the 'Subject' field, include details about the campaign, the 'shop name', and the 'customer name.' In the 'body' field, provide the email context, excluding the words: ${keywords} and include the list of products from the shop description, ensuring the content does not exceed ${length} words. Additionally, please remember to conclude the email with the mention of the shop name.`,
     },
     {
       role: "assistant",
-      content: `{"subject": "🎉 Black Friday sale for Pradeep Kumar 🎉","body": "Hello Pradeep Kumar, 🎉 Wishing you a Happy Diwali as bright as your gaming skills! 🕹️ We couldn't help but notice your fantastic taste in gaming accessories and electronics. 🎮 From your shopping history, you're clearly a gaming aficionado! 🎮.
-        This Diwali, we have some electrifying news for you. ⚡ But that's not all! Our shop is a treasure trove of gaming goodness. 🎁 Here are some more items we think you'll love,
-        1. 🖱️ Corsair Gaming Mouse
-        2. ⌨️ Logitech Keyboard with RGB red switch
-        3. 🎧 Red Gear Gaming Headset
-        4. 💽 NVME SSD and many more. 💽
-        These are just a taste of what we have to offer. Visit our website at www.tagbot.myshopify.com to explore our full range of products and take your gaming to the next level. 🌐 Wishing you a joyful Diwali filled with wins, power-ups, and high scores! 🏆
-        Warm regards, 🎮
-        Tagbot Gaming Shop 🎮"
+      content: `{"subject": "🎉 Black Friday Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
+
+      🎉 Get ready for the ultimate fitness shopping experience this Black Friday! 💪 At LA Fitness Pro. 🏋️‍♀️ From Olympic Barbell Sets to Adjustable Dumbbell Pairs, Weight Benches with Racks to Protein Powders, we've got it all. 🔥 This is your chance to elevate your fitness routine with high-quality gear at unbeatable prices. Don't miss out on our fantastic offer! 😍
+      
+      Visit us online at www.lafitnesspro.myshopify.com and start filling up your cart today. 🛒 Use the coupon code "FIRST20" to enjoy an exclusive discount on your first purchase. 💰 Hurry, these exceptional deals are available for a limited time only! ⏰
+      
+      Happy shopping, and let's crush those fitness goals together! 💪
+      
+      Best regards,
+      LA Fitness Pro 🏋️"
       }`,
     },
   ];
@@ -574,20 +575,21 @@ app.get("/whatsapp-message", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Advertising Copywriter, i need you to generate whatsapp marketing campaign for my customers based on the below prompt.The content should be in the below mentioned tone.Include the text's subject line's client name and context. Keep the content body short upto 70 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the context in bold letters. Remember not to use any SPAM words in subject or body`,
+      content: `As an Advertising Copywriter, i need you to generate whatsapp marketing campaign for my customers based on the below prompt.The content should be in the below mentioned tone.Include the text's subject line's client name and context. Keep the content body short upto 50 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the body content in bold letters. Remember not to use any SPAM words in subject or body and use emojis wherever necessary`,
     },
     {
       role: "user",
-      content: `Generate a marketing whatsapp message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForWhatsappMessage}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "greetings" property,"subject" property, which should include "${contextForWhatsappMessage}" and shop website and "Customer name" in it, and "body" property which should have the marketing context with these keywords : ${keywords}. Notes: In the end include the shop name ,strictly follow the size of the content and use only the products list provided`,
+      content: `Generate a marketing whatsapp message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForWhatsappMessage}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} , ${coupon ? `Coupon Code : ${coupon}` : ``} , Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Greetings" , "Subject" which should include "${contextForWhatsappMessage}" and shop website and "Customer name" in it, and "body" which should have the marketing context without these keywords : ${keywords}. Note: In the end include best regards and the shop name, and strictly follow the length of the content provided and use only the products list provided`,
     },
     {
       role: "assistant",
-      content: `{"greetings":"Hey Emma Mackey! 👋", "subject": "Halloween sale is here Emma Mackey" ,"body" : "🎮🔥 Tagbot Gaming Shop 🔥🎮
-       
-      With Halloweeen approaching, we have some exciting offers exclusively for you!
-      We've curated an exclusive selection of gaming and electronics products tailored just for you: 🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, ❄️ Cooler Master Aircooler.
-      
-      Explore these top-notch products at www.tagbot.myshopify.com and Wherever you are in Europe, Tagbot Gaming Shop has you covered. Get ready to elevate your gaming! 🎮✨Happy gaming, Emma! 🚀
+      content: `{"greetings":"Hey Emma Mackey! 👋", "subject": "Halloween sale is here Emma Mackey" , "body" : "🎮🔥 Tagbot Gaming Shop 🔥
+      Discover the future of entertainment with our latest electronics lineup! 📺🔊
+      🌟 Special Offer: use code SMART30 to get 30% on Smart TVs 🌟
+      Explore our high-quality gadgets today:🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, ❄️ Cooler Master Aircooler  
+visit us : www.tagbotgaming.myshopify.com
+✨Happy gaming, Emma! 🚀
+        
       Best regards,
       Tagbot Gaming Shop Team" }`,
     },
@@ -598,6 +600,7 @@ app.get("/whatsapp-message", async (req, res) => {
     model: "gpt-3.5-turbo-0613",
   });
   const result = {
+    role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
     completion_tokens: completion.usage.completion_tokens,
@@ -626,11 +629,11 @@ app.get("/sms", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Advertising Copywriter, i need you to generate marketing campaign message for my customers based on the below prompt.Include the text's subject line's client name and context. Keep the content body short upto 30 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the context in bold letters. Remember not to use any SPAM words in subject or body`,
+      content: `As an Advertising Copywriter, i need you to generate marketing campaign message for my customers based on the below prompt.Include the text's subject line's client name and context. Keep the content body short upto 30 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the context in bold letters. Remember not to use any SPAM words in subject or body and use emojis wherever necessary`,
     },
     {
       role: "user",
-      content: `Generate a marketing text message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForSMS}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} ${coupon ? ` Coupon: ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "greetings" property,"subject" property, which should include "${contextForSMS}" and shop website and "Customer name" in it, and "body" property which should have the marketing context with these keywords : ${keywords}. Notes: In the end include the shop name ,strictly follow the size of the content and use only the products list provided`,
+      content: `Generate a marketing text message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForSMS}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} ${coupon ? ` Coupon: ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "greetings" property,"subject" property, which should include "${contextForSMS}" and shop website and "Customer name" in it, and "body" property which should have the marketing context with these keywords : ${keywords} excluded Notes: In the end include the shop name ,strictly follow the size of the content and use only the products list provided`,
     },
     {
       role: "assistant",
@@ -654,6 +657,7 @@ app.get("/sms", async (req, res) => {
     model: "gpt-3.5-turbo-0613",
   });
   const result = {
+    role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
     completion_tokens: completion.usage.completion_tokens,
@@ -728,13 +732,9 @@ app.get('/finetune-status',async (req,res)=>{
 app.get("/finetune-customer-behavior-generation", async (req, res) => {
   const { firstName, lastName, city, country, orderHistory } = req.body;
 
-  let fileId=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_FILE_ID
-  let fineTune=process.env.FINE_TUNE_CUSTOMER_BEHAVIOR_JOB_ID
- 
-  const fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune);
   let messages= [{ role: "user", content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country},Order History:${JSON.stringify(
     orderHistory
-  )}` }]
+  )} and do not provide product description and generate content in 100 words` }]
   const completion = await openai.chat.completions.create({
     messages,
     model: process.env.FINE_TUNE_CUSTOMER_FINE_TUNED_MODEL,
@@ -772,7 +772,7 @@ app.get("/finetune-email-generation", async (req, res) => {
  
   let messages= [{
     role: "user",
-    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" field containing what the campaign is about and "shop name" and "Customer name" in it, and "body" field should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
+    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" field containing what the campaign is about and "shop name" and "Customer name" in it, and "body" field should have the email context with these keywords : ${keywords} excludedand the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
   }]
   const completion = await openai.chat.completions.create({
     messages,
@@ -823,7 +823,7 @@ app.get("/prompt-engine-email-generation", async (req, res) => {
             modelConfig: { maxTokens: 10000 },
           });
 
-          const query = `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} , the products list from shop description and do not exceed ${length} words. Notes: In the end include the shop name.`
+          const query = `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : ${keywords} excluded, the products list from shop description and do not exceed ${length} words. Notes: In the end include the shop name.`
           ;
             const prompt = codeEngine.buildPrompt(query);
           const messages= [
@@ -870,7 +870,7 @@ app.get("/prompt-engine-email-generation", async (req, res) => {
 
 app.get("/finetune-whatsapp-message", async (req, res) => {
   const {
-    contextForEmail,
+    contextForWhatsappMessage,
     shopDomain,
     first_name,
     last_name,
@@ -879,20 +879,16 @@ app.get("/finetune-whatsapp-message", async (req, res) => {
     shop_name,
     coupon,
     tone,
-    length,
     keywords,
   } = req.body;
-
-  let fileId=process.env.FINE_TUNE_EMAIL_FILE_ID
-  let fineTune=process.env.FINE_TUNE_EMAIL_JOB_ID
  
   let messages= [{
     role: "user",
-    content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Subject" field containing what the campaign is about and "shop name" and "Customer name" in it, and "body" field should have the email context with these keywords : ${keywords} and the products list from shop description. Notes: In the end include the shop name and do not exceed ${length} words in the email context`,
+    content: `Generate a marketing whatsapp message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForWhatsappMessage}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "greetings" property,"subject" property, which should include "${contextForWhatsappMessage}" and shop website and "Customer name" in it, and "body" property which should have the marketing context with these keywords : ${keywords} excluded. Notes: In the end include the shop name ,strictly follow the size of the content and use only the products list provided`,
   }]
   const completion = await openai.chat.completions.create({
     messages,
-    model: process.env.FINE_TUNE_EMAIL_FINE_TUNED_MODEL,
+    model: process.env.FINE_TUNE_WHATSAPP_FINE_TUNED_MODEL,
   });
   
   console.log(chalk.yellow(JSON.stringify(messages)));
