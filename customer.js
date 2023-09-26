@@ -519,24 +519,26 @@ app.get("/email-generation", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As a Marketing manager, your goal is to craft an email for my personalized email marketing campaign to my shop's customers based on the prompt below. The email should adopt the tone described below. Please ensure to include the client's name and context in the subject line. Keep the email body concise, adhering to the specified word limit. Please respond in the same format as the 'assistant' role content. Do not include any coupon or promo codes independently. If a discount code is provided, please emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body, and incorporate emojis.`,
+      content: `As a Marketing manager, your goal is to craft an email for my personalized email marketing campaign to my shop's customers based on the prompt below. The email should adopt the tone described below. Keep the email body concise not more than 100 words and please respond in the same format as the 'assistant' role content. Do not provide any coupon or promo codes on your own. If a coupon code is provided in the prompt,emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the email format, please create a JSON object. In the 'subject' field, include details about the campaign, the 'shop name', and the 'customer name' and incorporate emojis only in 'subject' field. In the 'body' field, provide the context using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and recommend products based on the shop description not the customer description .keep the response as short as the given character limit. Additionally, please remember to conclude the email with the mention of the shop name.`,
     },
     {
       role: "user",
-      content: `Generate a marketing email based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering} ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.For the email format, please create a JSON object. In the 'Subject' field, include details about the campaign, the 'shop name', and the 'customer name.' In the 'body' field, provide the email context, excluding the words: ${keywords} and include the list of products from the shop description, ensuring the content does not exceed ${length} words. Additionally, please remember to conclude the email with the mention of the shop name.`,
+      content: `Generate a marketing email based on a ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForEmail}, Customer Description: ${customer_behavior} and Shop Description: ${product_offering}, ${coupon ? `Coupon Code : ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name} and the generated content should be less than ${length} characters and avoid using these \'${keywords.toString()}\' words.`,
     },
     {
       role: "assistant",
-      content: `{"subject": "🎉 Black Friday Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
+      content: `{"subject": "🎉 Exclusive Black Friday Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
 
-      🎉 Get ready for the ultimate fitness shopping experience this Black Friday! 💪 At LA Fitness Pro. 🏋️‍♀️ From Olympic Barbell Sets to Adjustable Dumbbell Pairs, Weight Benches with Racks to Protein Powders, we've got it all. 🔥 This is your chance to elevate your fitness routine with high-quality gear at unbeatable prices. Don't miss out on our fantastic offer! 😍
+      I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Black Friday! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
       
-      Visit us online at www.lafitnesspro.myshopify.com and start filling up your cart today. 🛒 Use the coupon code "FIRST20" to enjoy an exclusive discount on your first purchase. 💰 Hurry, these exceptional deals are available for a limited time only! ⏰
+      At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You definitely won't want to miss out on this fantastic offer!
       
-      Happy shopping, and let's crush those fitness goals together! 💪
+      Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "FIRST20" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only!
       
-      Best regards,
-      LA Fitness Pro 🏋️"
+      Happy shopping, and together, let's conquer those fitness goals!
+      
+      Warmest regards,
+      LA Fitness Pro "
       }`,
     },
   ];
@@ -575,23 +577,18 @@ app.get("/whatsapp-message", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Advertising Copywriter, i need you to generate whatsapp marketing campaign for my customers based on the below prompt.The content should be in the below mentioned tone.Include the text's subject line's client name and context. Keep the content body short upto 50 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the body content in bold letters. Remember not to use any SPAM words in subject or body and use emojis wherever necessary`,
+      content: `As a Marketing manager, your goal is to craft a WhatsApp message for my personalized WhatsApp marketing campaign to my shop's customers based on the prompt below. The message should adopt the tone described below. Keep the email body concise  and please respond in the same format as the 'assistant' role content. Do not provide any coupon or promo codes on your own. If a coupon code is provided in the prompt,emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the message format, please create a JSON object. In the 'greetings' field, include a happy greeting with the customer's name. In the 'subject' field, include only the campaign context. In the 'body' field, provide the context using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and recommend products based on the shop description not the customer description .keep the response as short as 200 characters and incorporate emojis. Additionally, please remember to conclude the message with the mention of the shop name.`,
     },
     {
       role: "user",
-      content: `Generate a marketing whatsapp message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForWhatsappMessage}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} , ${coupon ? `Coupon Code : ${coupon}` : ``} , Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "Greetings" , "Subject" which should include "${contextForWhatsappMessage}" and shop website and "Customer name" in it, and "body" which should have the marketing context without these keywords : ${keywords}. Note: In the end include best regards and the shop name, and strictly follow the length of the content provided and use only the products list provided`,
+      content: `Generate a marketing whatsapp message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForWhatsappMessage}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} , ${coupon ? `Coupon Code : ${coupon}` : ``} , Shop Website: ${shopDomain} Shop name: ${shop_name},  and  avoid using these \'${keywords.toString()}\' words.`,
     },
     {
       role: "assistant",
-      content: `{"greetings":"Hey Emma Mackey! 👋", "subject": "Halloween sale is here Emma Mackey" , "body" : "🎮🔥 Tagbot Gaming Shop 🔥
-      Discover the future of entertainment with our latest electronics lineup! 📺🔊
-      🌟 Special Offer: use code SMART30 to get 30% on Smart TVs 🌟
-      Explore our high-quality gadgets today:🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, ❄️ Cooler Master Aircooler  
-visit us : www.tagbotgaming.myshopify.com
-✨Happy gaming, Emma! 🚀
-        
-      Best regards,
-      Tagbot Gaming Shop Team" }`,
+      content: `{"greetings": "Hey Emma Mackey! 👋",
+      "subject": "Halloween Sale is Here, Emma Mackey!",
+      "body": "🎮🔥 Welcome to Tagbot Gaming Shop! 🔥🎮 Discover the future of entertainment with our latest electronics lineup, including 📺 TVs and 🔊 audio equipment.\n\nBased on your order history, we see you've purchased gaming equipment like the BENQ monitor and NVIDIA 2060. We've got you covered with some must-have gaming gadgets: 🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, and ❄️ Cooler Master Air Cooler.\n\n🌟 Special Offer: Use code SMART30 to enjoy a 30% discount on Smart TVs! 🌟 Visit us at www.tagbotgaming.myshopify.com for more details and to shop now.\n\n✨ Happy gaming, Emma! 🚀\n\nBest regards,\nTagbot Gaming Shop Team"
+      " }`,
     },
   ];
 
@@ -629,26 +626,18 @@ app.get("/sms", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As an Advertising Copywriter, i need you to generate marketing campaign message for my customers based on the below prompt.Include the text's subject line's client name and context. Keep the content body short upto 30 words and give the response by taking "assistant" role content as an example and include emojis. Do not include any coupon code on your own. If I provide a coupon code, please highlight it in the context in bold letters. Remember not to use any SPAM words in subject or body and use emojis wherever necessary`,
+      content: `As a Marketing manager, your goal is to craft a SMS message for my personalized SMS marketing campaign to my shop's customers based on the prompt below. The message should adopt the tone described below. Keep the email body concise  and please respond in the same format as the 'assistant' role content. Do not provide any coupon or promo codes on your own. If a coupon code is provided in the prompt,emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the message format, please create a JSON object. In the 'greetings' field, include a happy greeting with the customer's name. In the 'subject' field, include only the campaign context. In the 'body' field, provide the context using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and recommend products based on the shop description not the customer description .keep the response as short as 90 characters and incorporate emojis. Additionally, please remember to conclude the message with the mention of the shop name.`,
     },
     {
       role: "user",
-      content: `Generate a marketing text message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForSMS}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} ${coupon ? ` Coupon: ${coupon}` : ``} Shop Website: ${shopDomain} Shop name: ${shop_name}.The email format should be in JSON object with "greetings" property,"subject" property, which should include "${contextForSMS}" and shop website and "Customer name" in it, and "body" property which should have the marketing context with these keywords : ${keywords} excluded Notes: In the end include the shop name ,strictly follow the size of the content and use only the products list provided`,
+      content: `Generate a marketing SMS message based on the ${tone} tone for Customer Name: ${first_name} ${last_name} for ${contextForSMS}, Customer Purchase History: ${customer_behavior} and Products available in the shop: ${product_offering} , ${coupon ? `Coupon Code : ${coupon}` : ``} , Shop Website: ${shopDomain} Shop name: ${shop_name},  and  avoid using these \'${keywords.toString()}\' words.`,
     },
     {
       role: "assistant",
-      content: `{"greetings":"Hey Emma Mackey! 👋", "subject": "Halloween sale is here Emma Mackey" ,"body" : "🎮🔥 Tagbot Gaming Shop 🔥🎮
-       
-      With Halloweeen approaching, we have some exciting offers exclusively for you!
-      We've curated an exclusive selection of gaming and electronics products tailored just for you:
-      🖱️ Corsair Gaming Mouse: Dominate the virtual battlefield with precision and style.
-      ⌨️ Logitech Keyboard with RGB Red Switch: Enjoy lightning-fast keystrokes and customizable RGB lighting.
-      🎧 Red Gear Gaming Headset: Immerse yourself in a world of stunning audio, making every game come to life.
-      💽 NVME SSD: Need more storage? Say goodbye to lag with blazing-fast data access.
-      ❄️ Cooler Master Aircooler: Keep your CPU cool under pressure, ensuring smooth gameplay.
-      Discover top-tier gaming products at www.tagbot.myshopify.com and level up your gaming experience across Europe with Tagbot Gaming Shop. Elevate your game!🎮✨Happy gaming, Emma! 🚀
-      Best regards,
-      Tagbot Gaming Shop Team" }`,
+      content: `{"greetings": "Hey Emma Mackey! 👋",
+      "subject": "Halloween Sale is Here, Emma Mackey!",
+      "body": "🎮 Tagbot Gaming Shop gives a special offer just for you. Use code **BOT30** to enjoy a 30% discount on ⌨️ Logitech Keyboard with RGB Red Switch!  🌟 Visit now : www.tagbotgaming.myshopify.com \n\n✨ Happy gaming, Emma! 🚀\n\nTagbot Gaming Shop Team"
+      " }`,
     },
   ];
 
