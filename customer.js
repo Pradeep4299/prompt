@@ -93,7 +93,7 @@ app.get("/customer-behavior/", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As a data analyst, it is your responsibility to provide an overview of your target market and a study of their product preferences using the data from the "user" role content. Give me recommendations for targeted marketing or promotions that will appeal to the client's preferences after carefully examining the facts. To start, determine what category of items the consumer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, avoid using the same items again in a response, propose products that are relevant, keep your response to one paragraph, and follow the structure specified in the content for the "assistant" job. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a "Overall" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.
+      content: `As a data analyst, it is your responsibility to provide an overview of your target market and a study of their product preferences using the data from the "user" role content. Give me recommendations for targeted marketing or promotions that will appeal to the client's preferences after carefully examining the facts. To start, determine what category of items the consumer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, avoid using the same items again in a response, propose products that are relevant, keep your response to one paragraph, and follow the structure specified in the content for the "assistant" job. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a \"Overall\" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.
         `,
     },
     {
@@ -108,7 +108,7 @@ app.get("/customer-behavior/", async (req, res) => {
         
         John is therefore more drawn to the areas of jewelry and fashion. It would be more acceptable to recommend jewelry-related promotion content, such as bracelets and necklaces, as well as fashion-related promos like T-shirts and tops.
         
-         John Doe, who resides in Europe, prefers to purchase expensive, high-quality jewelry and clothing.
+         Overall,John Doe resides in Europe, prefers to purchase expensive, high-quality jewelry and clothing.
         `,
     },
   ];
@@ -116,16 +116,20 @@ app.get("/customer-behavior/", async (req, res) => {
   const completion = await openai.chat.completions.create({
     messages,
     model: "gpt-3.5-turbo-16k-0613",
+    temperature:0.5
   });
-  const result = {
+  const response = {
     role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
     completion_tokens: completion.usage.completion_tokens,
     total_tokens: completion.usage.total_tokens,
   };
+
+  
+  const result=[messages[0],messages[1],{role:response.role,content:response.content}]
   console.log(chalk.red(JSON.stringify(result)));
-  res.send(result);
+  res.send(response);
 });
 
 app.get("/product-offering/v1", async (req, res) => {
@@ -318,7 +322,7 @@ app.get("/product-offering", async (req, res) => {
   const messages = [
     {
       role: "system",
-      content: `As a Marketing Analyst,your task is to generate a shop overview by analyzing shop details and products info provided in the prompt below. Mention shop name, website,category of products available in the shop and generate a response which will later be given to an AI model in a single paragraph format. Notes:Ensure that generated content is informative and keep the content short by not explaining about the product description. Stick to the format given in "assistant" role content and add the given "context" in the response `,
+      content: `As a Marketing Analyst,your task is to generate a shop overview by analyzing shop details and products info provided in the prompt below. Mention shop name, website, products available in the shop and generate a response which will later be given to an AI model in a single paragraph format. Notes:Ensure that generated content is informative and keep the content short by not explaining the product description. Stick to the format given in "assistant" role content and add the given "context" in the response `,
     },
     {
       role: "user",
@@ -328,24 +332,27 @@ app.get("/product-offering", async (req, res) => {
     },
     {
       role: "assistant",
-      content: `Discover the ultimate gaming and tech essentials at Tagbot Shop! Elevate your gaming experience with premium Headsets, Mouse, Keyboard, and Accessories. Whether you're a pro gamer or tech enthusiast, find precision, comfort, and style, all in one place. Explore our high-quality products and unbeatable deals at www.tagbot.com. Upgrade your gear, upgrade your game visit us today!`,
+      content: `Discover the ultimate gaming and tech essentials at Tagbot Shop! Elevate your gaming experience with premium JBL Headset,LOGITECH G102 GAMING Mouse, REDRAGON Keyboard, and more. Whether you're a pro gamer or tech enthusiast, find precision, comfort, and style, all in one place. Explore our high-quality products and unbeatable deals at www.tagbot.com. Upgrade your gear, upgrade your game visit us today!`,
     },
   ];
 
   const completion = await openai.chat.completions.create({
     messages,
     model: "gpt-3.5-turbo-16k-0613",
+    temperature:0.2
   });
-  const result = {
+  const response = {
+    role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
     completion_tokens: completion.usage.completion_tokens,
     total_tokens: completion.usage.total_tokens,
   };
 
-  res.send(result);
-  console.log(chalk.red(JSON.stringify(messages)));
-  console.log(chalk.green(JSON.stringify(result)));
+  
+  const result=[messages[0],messages[1],{role:response.role,content:response.content}]
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
 });
 
 app.get("/email-generation/v1", async (req, res) => {
@@ -546,8 +553,9 @@ app.get("/email-generation", async (req, res) => {
   const completion = await openai.chat.completions.create({
     messages,
     model: "gpt-3.5-turbo-0613",
+    temperature:0.2
   });
-  const result = {
+  const response = {
     role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
@@ -555,9 +563,10 @@ app.get("/email-generation", async (req, res) => {
     total_tokens: completion.usage.total_tokens,
   };
 
-  res.send(result);
-  console.log(chalk.red(JSON.stringify(messages)));
-  console.log(chalk.green(JSON.stringify(result)));
+  
+  const result=[messages[0],messages[1],{role:response.role,content:response.content}]
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
 });
 
 app.get("/whatsapp-message", async (req, res) => {
@@ -596,7 +605,7 @@ app.get("/whatsapp-message", async (req, res) => {
     messages,
     model: "gpt-3.5-turbo-0613",
   });
-  const result = {
+  const response = {
     role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
@@ -604,9 +613,10 @@ app.get("/whatsapp-message", async (req, res) => {
     total_tokens: completion.usage.total_tokens,
   };
 
-  res.send(result);
-  console.log(chalk.red(JSON.stringify(messages)));
-  console.log(chalk.green(JSON.stringify(result)));
+  
+  const result=[messages[0],messages[1],{role:response.role,content:response.content}]
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
 });
 
 app.get("/sms", async (req, res) => {
@@ -645,7 +655,7 @@ app.get("/sms", async (req, res) => {
     messages,
     model: "gpt-3.5-turbo-0613",
   });
-  const result = {
+  const response = {
     role: completion.choices[0].message.role,
     content: completion.choices[0].message.content,
     prompt_tokens: completion.usage.prompt_tokens,
@@ -653,9 +663,10 @@ app.get("/sms", async (req, res) => {
     total_tokens: completion.usage.total_tokens,
   };
 
-  res.send(result);
-  console.log(chalk.red(JSON.stringify(messages)));
-  console.log(chalk.green(JSON.stringify(result)));
+  
+  const result=[messages[0],messages[1],{role:response.role,content:response.content}]
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
 });
 
 app.get('/finetune-job-creation',async (req,res)=>{
