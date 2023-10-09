@@ -2,26 +2,26 @@
   {
     "title": "Classic Varsity Top",
     "productType": "fashion",
-    "body_html": "Womens casual varsity top, This grey and black buttoned top is a sport-inspired piece complete with an embroidered letter."
-  },
+    "price":200
+},
   {
     "title": "Classic Leather Jacket",
     "productType": "fashion",
-    "body_html": "Womans zipped leather jacket. Adjustable belt for a comfortable fit, complete with shoulder pads and front zip pocket."
-  },
+    "price":200
+},
   {
     "title": "Chequered Red Shirt",
     "productType": "fashion",
-    "body_html": "Classic mens plaid flannel shirt with long sleeves, in chequered style, with two chest pockets."
-  },
+    "price":200
+},
   {
     "title": "Leather Boxers",
     "productType": "Clothing",
-    "body_html": "Good quality boxers with great appearance and styling comes with multi-variant option."
-  },
+    "price":200
+},
   {
     "title": "Super Thick Hoody",
     "productType": "Clothing",
-    "body_html": "Green Color hoody which will be suitable to wear for any occasions which will be more comfortable and softs"
-  }
+    "price":200
+ }
 ]
