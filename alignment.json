@@ -1,1 +1,7 @@
-{"role":"assistant","content":"{\"greetings\": \"Hey Pradeep Kumar! 👋\",\n      \"subject\": \"🎃 Get Ready for Halloween at Tagbot Gaming Shop! 🎃\",\n      \"body\": \"👻 Trick or treat, Pradeep! Get into the spooky spirit with our **Halloween Sale**. Use code **BOTT15** for 15% off on gaming chairs, monitors, and controllers! 🎮🔥 Shop now at www.tagbotgaming.com. 🕷️🕸️\n\n🎃 Happy gaming,Pradeep! 🎮\n\nTagbot Gaming Shop\"\n      \" }"}
+{
+  "role": "assistant",
+  "content": "{\n  \"shopName\": \"Tagbot Gaming\",\n  \"subject\": \"🎄 Get Ready for the Great American Savings Fest, Pradeep Kumar! 🎉\",\n  \"body\": \"🎮🔥 Hey Pradeep Kumar, we're excited to announce the Great American Savings Fest starting on December 25th! Get ready for amazing deals on gaming accessories and tech products. 🎁🎉\n\n🖥️ Upgrade your gaming setup with our top picks: Gaming Chairs, Gaming Monitors, and Gaming Controllers. 🎮🎧\n\n🌟 Don't miss out on the latest gaming consoles and popular video games! 🎮🎮\n\n🎄🎁 Use coupon code **FIRST20** for 20% off your first purchase. Shop now at www.tagbotgaming.com. 🎄🎁\n\nHappy gaming, Pradeep Kumar! 🚀\n\nBest regards,\nTagbot Gaming Shop\"\n}",
+  "prompt_tokens": 726,
+  "completion_tokens": 205,
+  "total_tokens": 931
+}
