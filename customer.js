@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { config } from "dotenv";
 import chalk from "chalk";
 import fs from "fs";
+import Shopify from "shopify-api-node";
 import { CodeEngine } from "prompt-engine";
 config();
 const app = express();
@@ -11,6 +12,15 @@ app.use(express.json());
 //openai object
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
+});
+
+const storeDomain=process.env.SHOPIFY_STORE_DOMAIN
+const accessToken=process.env.SHOPIFY_ACCESS_TOKEN
+
+const shopify =  Shopify({
+  shopName: storeDomain ,
+  accessToken: accessToken,
+  autoLimit: true,
 });
 
 /*Customer super profile */
@@ -351,7 +361,10 @@ app.get("/product-offering/v5", async (req, res) => {
 
 app.get("/product-offering", async (req, res) => {
   //added context based content generation//
-  const { shopDomain, shopName, products, orders } = req.body;
+  const { shopDomain,
+     shopName,
+      products,
+        type } = req.body;
   const numberOfProducts = orders.length;
   let totalRevenue = 0;
 
@@ -359,6 +372,37 @@ app.get("/product-offering", async (req, res) => {
     totalRevenue += order.total_price;
   }
   const AOV = Math.round(totalRevenue / numberOfProducts);
+
+
+//   let products = [];
+//   let fetchedProducts;
+//   let sinceId;
+//   let totalRevenue=500
+//   let AOV=25
+
+//   do {
+//     // Using pagination with the `since_id` parameter to fetch batches of products
+//     fetchedProducts = await shopify.product.list({
+//       limit: 250, // Max allowed per request by Shopify
+//       since_id: sinceId,
+//       fields: 'id,title,body_html,product_type', // Fetch only necessary fields to reduce payload
+//     });
+
+//     products = [...products, ...fetchedProducts];
+
+//     // Set the sinceId for the next iteration
+//     if (fetchedProducts.length) {
+//       sinceId = fetchedProducts[fetchedProducts.length - 1].id;
+//     }
+
+//     console.log(
+//       `Fetched ${fetchedProducts.length} products, sinceId: ${sinceId}`,
+//     );
+//   } while (fetchedProducts.length);
+
+// console.log(products);
+// res.send(products)
+
   let messages;
   if (products.length < 10) {
     messages = [
@@ -672,7 +716,7 @@ app.get("/whatsapp-message", async (req, res) => {
       } ${
         eventDate ? `Starts on : ${eventDate}` : ``
       }, Customer Description: ${customerBehavior} and Shop Description: ${productOffering} , ${
-        coupon ? `Coupon code: ${coupon}`: ``
+        coupon ? `Coupon code: ${coupon}` : ``
       } , Shop Website: ${shopDomain} Shop name: ${shopName}, and avoid using these words such as  \'${keywords.toString()}\' in the response.`,
     },
     {
@@ -805,7 +849,7 @@ app.get("/finetune-job-creation", async (req, res) => {
     training_file: fileId,
     model: "gpt-3.5-turbo-0613",
   });
-  let fineTuneJob ;
+  let fineTuneJob;
   while (true) {
     // see if the status is succeeded, or else wait for some time so that it will get changed and it will give u the trained model name.
     fineTuneJob = await openai.fineTuning.jobs.retrieve(fineTune.id);
@@ -927,12 +971,14 @@ app.get("/prompt-engine-email-generation", async (req, res) => {
 
   const examples = [
     {
-      input:'Generate a marketing email for Customer Name: Sophia Williams for Halloween Sale, Customer Purchase History: Customer Sophia Williams, who is from London, UK, has a preference for luxury fashion items based on her order history. She has bought a Designer Leather Jacket, High-End Italian Leather Shoes, Silk Evening Gown, and Cashmere Sweater. Based on her purchases, it is clear that she has a taste for high-quality and stylish clothing. To target her preferences, advertisements or promotions for premium fashion brands, designer clothing, and accessories would be effective. Additionally, promotions for exclusive discounts or limited edition collections could also be appealing to her. Overall, Sophia Williams is a customer from London, UK, who is interested in luxury fashion items. and Products available in the shop: Introducing London Couture, the ultimate destination for exclusive designer clothing. Elevate your style with our exquisite collection of elegant evening dresses, tailored suits for men, designer handbags, luxury cashmere sweaters, and classy leather Oxford shoes. Each product is crafted with utmost care and attention to detail, ensuring a perfect fit and sophisticated look. Discover a world of high-end fashion and shop at www.londoncouture.myshopify.com to elevate your style to new heights. London Couture - Elevating your style with exclusive designer clothing. Coupon:FIRST20 Shop Website: www.londoncouture.myshopify.com Shop name: London Couture The email format should be in JSON object with "subject" property, which should include "Diwali Sale" and shop website (make it as hyperlink) and "Customer name" in it, and "body" property which should have the email context. NoteS: In the end include the shop name',
+      input:
+        'Generate a marketing email for Customer Name: Sophia Williams for Halloween Sale, Customer Purchase History: Customer Sophia Williams, who is from London, UK, has a preference for luxury fashion items based on her order history. She has bought a Designer Leather Jacket, High-End Italian Leather Shoes, Silk Evening Gown, and Cashmere Sweater. Based on her purchases, it is clear that she has a taste for high-quality and stylish clothing. To target her preferences, advertisements or promotions for premium fashion brands, designer clothing, and accessories would be effective. Additionally, promotions for exclusive discounts or limited edition collections could also be appealing to her. Overall, Sophia Williams is a customer from London, UK, who is interested in luxury fashion items. and Products available in the shop: Introducing London Couture, the ultimate destination for exclusive designer clothing. Elevate your style with our exquisite collection of elegant evening dresses, tailored suits for men, designer handbags, luxury cashmere sweaters, and classy leather Oxford shoes. Each product is crafted with utmost care and attention to detail, ensuring a perfect fit and sophisticated look. Discover a world of high-end fashion and shop at www.londoncouture.myshopify.com to elevate your style to new heights. London Couture - Elevating your style with exclusive designer clothing. Coupon:FIRST20 Shop Website: www.londoncouture.myshopify.com Shop name: London Couture The email format should be in JSON object with "subject" property, which should include "Diwali Sale" and shop website (make it as hyperlink) and "Customer name" in it, and "body" property which should have the email context. NoteS: In the end include the shop name',
       response:
         '{"subject": "🎃 Halloween Sale for Sophia Williams 🎃","body": "Hello Sophia Williams, 🎃 Get ready for a spooktacular Halloween sale at London Couture! 🕷️🎉 We know you have a taste for luxury fashion, and this sale is tailor-made for you. 👗👠 From exquisite designer leather jackets to high-end Italian leather shoes, silk evening gowns, and cashmere sweaters, we have everything you need to elevate your style. 💎✨\n\nThe Halloween Sale offers mind-blowing discounts on our entire collection of premium fashion brands, designer clothing, and accessories. 👜🔥 Don\'t miss out on these ultimate offers! 😱💸\n\nShop now at www.londoncouture.myshopify.com to discover the perfect additions to your wardrobe. 🛍️🌟 Hurry, the sale ends soon!\n\nLondon Couture - Elevating your style with exclusive designer clothing."}',
     },
     {
-      input:'Generate a marketing email based on the informative and professional tone for Customer Name: Michael Anderson for Black Friday Sale, Customer Description: Michael Anderson is interested in fitness and workout equipment as indicated by his purchase history. He has bought an Olympic Barbell Set, Adjustable Dumbbell Pair, Weight Bench with Rack, and Protein Powder. Based on this, it is clear that Michael is interested in fitness and weight lifting. Targeted advertisements or promotions that would likely appeal to him include gym memberships, weight training accessories such as lifting gloves or belts, workout clothing, and protein supplements. These recommendations would align with his interests and encourage him to continue investing in his fitness journey. Overall, Michael Anderson from Los Angeles, USA is interested in fitness and workout equipment. and Shop Description: Introducing LA Fitness Pro Shop, your go-to destination for all your fitness and sports gear needs in Los Angeles. Explore our wide range of products including professional treadmills, weightlifting sets, yoga mat and accessories kits, basketball gear packages, and top-quality running shoes. With LA Fitness Pro Shop, you can find everything you need to enhance your fitness routine and excel in your favorite sports. Visit us online at www.lafitnesspro.myshopify.com and start your journey towards a healthier and more active lifestyle today. Coupon Code : FIRST20 Shop Website: www.lafitnesspro.myshopify.com Shop name: LA Fitness Pro. The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : Bumper offer, mind-blowing, ultimate offers and the products list from shop description. Notes: In the end include the shop name and do not exceed 150 words in the email context',
+      input:
+        'Generate a marketing email based on the informative and professional tone for Customer Name: Michael Anderson for Black Friday Sale, Customer Description: Michael Anderson is interested in fitness and workout equipment as indicated by his purchase history. He has bought an Olympic Barbell Set, Adjustable Dumbbell Pair, Weight Bench with Rack, and Protein Powder. Based on this, it is clear that Michael is interested in fitness and weight lifting. Targeted advertisements or promotions that would likely appeal to him include gym memberships, weight training accessories such as lifting gloves or belts, workout clothing, and protein supplements. These recommendations would align with his interests and encourage him to continue investing in his fitness journey. Overall, Michael Anderson from Los Angeles, USA is interested in fitness and workout equipment. and Shop Description: Introducing LA Fitness Pro Shop, your go-to destination for all your fitness and sports gear needs in Los Angeles. Explore our wide range of products including professional treadmills, weightlifting sets, yoga mat and accessories kits, basketball gear packages, and top-quality running shoes. With LA Fitness Pro Shop, you can find everything you need to enhance your fitness routine and excel in your favorite sports. Visit us online at www.lafitnesspro.myshopify.com and start your journey towards a healthier and more active lifestyle today. Coupon Code : FIRST20 Shop Website: www.lafitnesspro.myshopify.com Shop name: LA Fitness Pro. The email format should be in JSON object with "Subject" should include what the campaign is about and "shop name" and "Customer name" in it, and "body" should have the email context with these keywords : Bumper offer, mind-blowing, ultimate offers and the products list from shop description. Notes: In the end include the shop name and do not exceed 150 words in the email context',
       response: {
         subject: "🎉 Ultimate Black Friday Sale for Michael Anderson 🎉",
         body: "Hello Michael Anderson, 🎉 We hope you're staying fit and healthy!. From your past purchases, it's clear that you're passionate about fitness and weightlifting. 💪\nWe're excited to announce our Bumper Black Friday Sale, exclusively for our valued customers like you. 🛍️ With mind-blowing discounts on a wide range of workout equipment and accessories, you can take your fitness routine to the next level!\nCheck out our fantastic offers:\n1. Olympic Barbell Set\n2. Adjustable Dumbbell Pair\n3. Weight Bench with Rack\n4. Protein Powder\nAnd more!\nJust for you, we're offering an extra 20% discount on your first purchase. Use the coupon code FIRST20 at checkout to avail of this special offer.\nDon't miss out on these amazing deals! Visit our website at www.lafitnesspro.myshopify.com to grab your favorite fitness gear at unbeatable prices.\nWishing you a healthy and active Black Friday!,\nLA Fitness Pro Shop 🏋️",
@@ -1028,6 +1074,82 @@ app.get("/finetune-whatsapp-message", async (req, res) => {
   console.log(chalk.red(JSON.stringify(result)));
   res.send(result);
 });
+
+
+app.get('/language-change')
+
+app.get('/multi-language',async(req,res)=>{
+  const {
+    context,
+    shopDomain,
+    firstName,
+    lastName,
+    customerBehavior,
+    productOffering,
+    shopName,
+    coupon,
+    tone,
+    keywords,
+    targetAudience,
+    eventName,
+    eventDate,
+    language
+  } = req.body;
+
+  const messages = [
+    {
+      role: "system",
+      content: `As a Marketing manager, your goal is to craft an email for my personalized email marketing campaign to my shop's customers based on the prompt below. The email should adopt the tone and the targeted audience described below. Keep the email body concise not more than 80 words and please respond in the same format as the 'assistant' role content but as per the tone, targeted audience and the language mentioned in the prompt. Do not provide any coupon or promo codes on your own. If a coupon code is provided in the prompt,emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the email format, please create a JSON object. In the 'subject' field, include details about the campaign context,event name if provided, the 'shop name', and the 'customer name' and incorporate emojis only in 'subject' field. In the 'body' field, provide the context using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and recommend the products mentioned on the Shop description not on the Customer description . Keep the response as short as the given character limit and mention the event date if provided. Additionally, please remember to conclude the email with the mention of the shop name.`,
+    },
+    {
+      role: "user",
+      content: `Generate a ${tone} tone marketing email ${language?`in ${language}`:``} tailored to ${targetAudience} audience for the Customer ${firstName} ${lastName} for upcoming ${context}, ${
+        eventName ? `Event : ${eventName}` : ``
+      } ${
+        eventDate ? `Starts on : ${eventDate}` : ``
+      }, Customer Description: ${customerBehavior} and Shop Description: ${productOffering}, ${
+        coupon ? `Coupon Code : ${coupon}` : ``
+      } , Shop Website: ${shopDomain}, Shop name: ${shopName}, and avoid using these words such as \'${keywords.toString()}\' in the response.`,
+    },
+    {
+      role: "assistant",
+      content: `{"subject": "🎉 Bigg Billion Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
+
+      I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Christmas! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
+      
+      At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You definitely won't want to miss out on this fantastic offer!
+      
+      Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "**FIRST20**" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only . Starts on 23-12-2019!
+      
+      Happy shopping, and together, let's conquer those fitness goals!
+      
+      Warmest regards,
+      LA Fitness Pro "
+      }`,
+    },
+  ];
+
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.4,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+})
 
 app.listen(3000, () => {
   console.log(`Server listening on port 3000`);
