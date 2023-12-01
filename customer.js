@@ -3,7 +3,6 @@ import OpenAI from "openai";
 import { config } from "dotenv";
 import chalk from "chalk";
 import fs from "fs";
-import Shopify from "shopify-api-node";
 import { CodeEngine } from "prompt-engine";
 config();
 const app = express();
@@ -12,15 +11,6 @@ app.use(express.json());
 //openai object
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
-});
-
-const storeDomain=process.env.SHOPIFY_STORE_DOMAIN
-const accessToken=process.env.SHOPIFY_ACCESS_TOKEN
-
-const shopify =  Shopify({
-  shopName: storeDomain ,
-  accessToken: accessToken,
-  autoLimit: true,
 });
 
 /*Customer super profile */
@@ -100,80 +90,97 @@ app.get("/customer-behavior/v2", async (req, res) => {
   res.send(result);
 });
 
-app.get("/customer-behavior/", async (req, res) => {
-  const { firstName, lastName, city, country, pin, joinDate, orderHistory } =
-    req.body;
+// app.get("/customer-behavior/", async (req, res) => {
+//   const { firstName, lastName, city, country, joinedDate, orders,emailMarketingConsent } =
+//     req.body;
 
-  const numberOfOrders = orderHistory.length;
-  let totalSpent = 0;
+//   const numberOfOrders = orders.length;
+//   let totalSpent = 0;
 
-  for (const order of orderHistory) {
-    totalSpent += order.price;
-  }
-  const AOV = Math.round(totalSpent / numberOfOrders);
-  let messages;
-  if (orderHistory.length < 10) {
-    messages = [
-      {
-        role: "system",
-        content: `As a data analyst, it is your responsibility to provide an overview of the customer and a study of their product preferences using the data from the \"user\" role content. Give me recommendations for targeted marketing or promotions that will appeal to the customer's preferences after carefully examining the facts. To start, determine what products the customer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, propose products that are relevant, keep your response to one paragraph in 60 words, and follow the structure specified in the content for the "assistant" job and do not provide product description. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a \"Overall\" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.`,
-      },
-      {
-        role: "user",
-        content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country}, ZIP:${pin}, Joining Date:${joinDate
-          .toLocaleString()
-          .slice(0, 10)},Order History:${JSON.stringify(
-          orderHistory
-        )} Total Spent:$${totalSpent}, Number of Orders:${numberOfOrders}, Average Order Value:$${AOV}`,
-      },
-      {
-        role: "assistant",
-        content: `Customer John Doe is interested in high-end items like KZ diamond necklace and Gold ring, which fall within the jewelry category, and fashion items because he purchased ZARA shirts, Nike T-shirts.John is therefore more drawn to the areas of jewelry and fashion. It would be more acceptable to recommend jewelry-related promotion content, such as bracelets and necklaces, as well as fashion-related promos like T-shirts and tops.Overall,John Doe resides in Europe, prefers to purchase expensive, high-quality jewelry and clothing.`,
-      },
-    ];
-  } else {
-    messages = [
-      {
-        role: "system",
-        content: `As a data analyst, it is your responsibility to provide an overview of the customer and a study of their product preferences using the data from the \"user\" role content. Give me recommendations for targeted marketing or promotions that will appeal to the customer's preferences after carefully examining the data. To start, determine what category of items the consumer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, propose products that are relevant, keep your response to one paragraph in 60 words, and follow the structure specified in the content for the "assistant" job and do not provide product name and description. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a \"Overall\" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.`,
-      },
-      {
-        role: "user",
-        content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country}, ZIP:${pin}, Joining Date:${joinDate
-          .toLocaleString()
-          .slice(0, 10)},Order History:${JSON.stringify(
-          orderHistory
-        )} Total Spent:$${totalSpent}, Number of Orders:${numberOfOrders}, Average Order Value:$${AOV}`,
-      },
-      {
-        role: "assistant",
-        content: `Customer John Doe is interested in high-end items like diamond necklaces, which fall within the jewelry category, and fashion items because he purchased shirts, jeans, and joggers.John is therefore more drawn to the areas of jewelry and fashion. It would be more acceptable to recommend jewelry-related promotion content, such as bracelets and necklaces, as well as fashion-related promos like T-shirts and tops.Overall,John Doe resides in Europe, prefers to purchase expensive, high-quality jewelry and clothing.`,
-      },
-    ];
-  }
+//   for (const order of orders) {
+//     totalSpent += order.price;
+//   }
+//   const AOV = Math.round(totalSpent / numberOfOrders);
+//   const lastPurchase = orders.reduce((latest, item) => {
+//     if (new Date(item.purchasedOn) > new Date(latest.purchasedOn)) {
+//       return item;
+//     }
+//     return latest;
+//   }, orders[0]);
+//   let messages;
+//   if (orders.length < 10) {
+//     messages = [
+//       {
+//         role: "system",
+//         content: `As a data analyst, it is your responsibility to provide an overview of the customer and a study of their product preferences using the data from the \"user\" role content. Give me recommendations for targeted marketing or promotions that will appeal to the customer's preferences after carefully examining the facts. To start, determine what products the customer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, propose products that are relevant, keep your response to one paragraph in 60 words, and follow the structure specified in the content for the "assistant" job and do not provide product description. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a \"Overall\" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.`,
+//       },
+//       {
+//         role: 'user',
+//         content: `Generate a customer behavior for Customer Name: John Doe , Region: New york USA, Joining Date:'2022-08-21T08:45:20.567Z',Order History:[{"title":"KZ Diamond Necklace","price":2000,"purchasedOn":"2023-08-01T10:00:00.000Z"},{"title":"Gold Ring","price":500,"purchasedOn":"2023-08-10T10:00:00.000Z"},{"title":"ZARA Shirts","price":100,"purchasedOn":"2023-08-20T10:00:00.000Z"},{"title":"Nike T-shirts","price":50,"purchasedOn":"2023-08-30T10:00:00.000Z"}] Total Spent:$2650, Number of Orders: 4 , Average Order Value:$662, Recent Purchase:"Nike T-shirts". Accepts Marketing : yes`,
+//       },
+//       {
+//         role: 'assistant',
+//         content: `Customer Mr.John Doe is from New york USA and he is interested in high-end items like KZ diamond necklace and Gold ring, which fall within the jewelry category, and fashion items because he purchased ZARA shirts, Nike T-shirts.John is therefore more drawn to the areas of jewelry and fashion and he can be tagged as "Frequent Purchaser, Recent joiner", since he bought 4 items.Mr John doe has been a very promising customer since august 21 and has spent a whopping 2650 dollars and his average order value is 662  and allows marketing recommendations.Overall,John Doe resides in USA, prefers to purchase expensive, high-quality jewelry and clothing.`,
+//       },
+//       {
+//         role: 'user',
+//         content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country}, Joining Date:${joinedDate
+//           .toLocaleString()
+//           .slice(0, 10)},Order History:${JSON.stringify(
+//           orders,
+//         )} Total Spent:$${totalSpent}, Number of Orders:${numberOfOrders}, Average Order Value:$${AOV}, Recent Purchase: ${JSON.stringify(
+//           lastPurchase,
+//         )} Accepts Marketing : ${emailMarketingConsent ? `Yes` : `No`}`,
+//       },
+//     ];
+//   } else {
+//     messages = [
+//       {
+//         role: "system",
+//         content: `As a data analyst, it is your responsibility to provide an overview of the customer and a study of their product preferences using the data from the \"user\" role content. Give me recommendations for targeted marketing or promotions that will appeal to the customer's preferences after carefully examining the data. To start, determine what category of items the consumer had purchased by reading the "title" property. Note: Make sure the information you create is helpful, propose products that are relevant, keep your response to one paragraph in 60 words, and follow the structure specified in the content for the "assistant" job and do not provide product name and description. Remember: In order for the created material to be used as input by the AI model to generate content for marketing campaigns, it must include a \"Overall\" paragraph at the end that highlights the customer's name, region, and the category of items that he is interested in.`,
+//       }, {
+//         role: 'user',
+//         content: `Generate a customer behavior for Customer Name: John Doe , Region: New york USA, Joining Date:'2022-08-21T08:45:20.567Z',Order History:[{"title":"KZ Diamond Necklace","price":2000,"purchasedOn":"2023-08-01T10:00:00.000Z"},{"title":"Gold Ring","price":500,"purchasedOn":"2023-08-10T10:00:00.000Z"},{"title":"ZARA Shirts","price":100,"purchasedOn":"2023-08-20T10:00:00.000Z"},{"title":"Nike T-shirts","price":50,"purchasedOn":"2023-08-30T10:00:00.000Z"}] Total Spent:$2650, Number of Orders: 4 , Average Order Value:$662, Recent Purchase:"Nike T-shirts". Accepts Marketing : yes`,
+//       },
+//       {
+//         role: 'assistant',
+//         content: `Customer Mr.John Doe is from New york USA and he is interested in high-end items like KZ diamond necklace and Gold ring, which fall within the jewelry category, and fashion items because he purchased ZARA shirts, Nike T-shirts.John is therefore more drawn to the areas of jewelry and fashion and he can be tagged as "Frequent Purchaser, Recent joiner", since he bought 4 items.Mr John doe has been a very promising customer since august 21 and has spent a whopping 2650 dollars and his average order value is 662  and allows marketing recommendations.Overall,John Doe resides in USA, prefers to purchase expensive, high-quality jewelry and clothing.`,
+//       },
+//       {
+//         role: 'user',
+//         content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country}, Joining Date:${joinedDate
+//           .toLocaleString()
+//           .slice(0, 10)},Order History:${JSON.stringify(
+//           orders,
+//         )} Total Spent:$${totalSpent}, Number of Orders:${numberOfOrders}, Average Order Value:$${AOV}, Recent Purchase: ${JSON.stringify(
+//           lastPurchase,
+//         )} Accepts Marketing : ${emailMarketingConsent ? `Yes` : `No`}`,
+//       },
+//     ];
+//   }
 
-  console.log(chalk.yellow(JSON.stringify(messages)));
-  const completion = await openai.chat.completions.create({
-    messages,
-    model: "gpt-3.5-turbo-16k-0613",
-    temperature: 0.5,
-  });
-  const response = {
-    role: completion.choices[0].message.role,
-    content: completion.choices[0].message.content,
-    prompt_tokens: completion.usage.prompt_tokens,
-    completion_tokens: completion.usage.completion_tokens,
-    total_tokens: completion.usage.total_tokens,
-  };
+//   console.log(chalk.yellow(JSON.stringify(messages)));
+//   const completion = await openai.chat.completions.create({
+//     messages,
+//     model: "gpt-3.5-turbo-16k-0613",
+//     temperature: 0.5,
+//   });
+//   const response = {
+//     role: completion.choices[0].message.role,
+//     content: completion.choices[0].message.content,
+//     prompt_tokens: completion.usage.prompt_tokens,
+//     completion_tokens: completion.usage.completion_tokens,
+//     total_tokens: completion.usage.total_tokens,
+//   };
 
-  const result = [
-    messages[0],
-    messages[1],
-    { role: response.role, content: response.content },
-  ];
-  console.log(chalk.red(JSON.stringify(result)));
-  res.send(response);
-});
+//   const result = [
+//     messages[0],
+//     messages[1],
+//     { role: response.role, content: response.content },
+//   ];
+//   console.log(chalk.red(JSON.stringify(result)));
+//   res.send(response);
+// });
 
 //shop super profile
 app.get("/product-offering/v1", async (req, res) => {
@@ -361,84 +368,158 @@ app.get("/product-offering/v5", async (req, res) => {
 
 app.get("/product-offering", async (req, res) => {
   //added context based content generation//
-  const { shopDomain,
-     shopName,
-      products,
-        type } = req.body;
-  const numberOfProducts = orders.length;
-  let totalRevenue = 0;
+  const {
+    storeDomain,
+    storeName,
+    city,
+    country,
+    listOfProducts,
+    keywordsToBeExcluded,
+    keywordsToBeIncluded,
+    tone,
+    keyAudience,
+    categoryOfProducts,
+  } = req.body;
+  // const numberOfProducts = orders.length;
+  const totalRevenue = 4450;
+  const AverageOrderValue = 750;
+  const AveragePriceOfProducts = 800;
 
-  for (const order of orders) {
-    totalRevenue += order.total_price;
-  }
-  const AOV = Math.round(totalRevenue / numberOfProducts);
+  // for (const order of orders) {
+  //   totalRevenue += order.total_price;
+  // }
+  // const AOV = Math.round(totalRevenue / numberOfProducts);
 
+  //   let products = [];
+  //   let fetchedProducts;
+  //   let sinceId;
+  //   let totalRevenue=500
+  //   let AOV=25
 
-//   let products = [];
-//   let fetchedProducts;
-//   let sinceId;
-//   let totalRevenue=500
-//   let AOV=25
+  //   do {
+  //     // Using pagination with the `since_id` parameter to fetch batches of products
+  //     fetchedProducts = await shopify.product.list({
+  //       limit: 250, // Max allowed per request by Shopify
+  //       since_id: sinceId,
+  //       fields: 'id,title,body_html,product_type', // Fetch only necessary fields to reduce payload
+  //     });
 
-//   do {
-//     // Using pagination with the `since_id` parameter to fetch batches of products
-//     fetchedProducts = await shopify.product.list({
-//       limit: 250, // Max allowed per request by Shopify
-//       since_id: sinceId,
-//       fields: 'id,title,body_html,product_type', // Fetch only necessary fields to reduce payload
-//     });
+  //     products = [...products, ...fetchedProducts];
 
-//     products = [...products, ...fetchedProducts];
+  //     // Set the sinceId for the next iteration
+  //     if (fetchedProducts.length) {
+  //       sinceId = fetchedProducts[fetchedProducts.length - 1].id;
+  //     }
 
-//     // Set the sinceId for the next iteration
-//     if (fetchedProducts.length) {
-//       sinceId = fetchedProducts[fetchedProducts.length - 1].id;
-//     }
+  //     console.log(
+  //       `Fetched ${fetchedProducts.length} products, sinceId: ${sinceId}`,
+  //     );
+  //   } while (fetchedProducts.length);
 
-//     console.log(
-//       `Fetched ${fetchedProducts.length} products, sinceId: ${sinceId}`,
-//     );
-//   } while (fetchedProducts.length);
+  // console.log(products);
+  // res.send(products)
 
-// console.log(products);
-// res.send(products)
+  //new
+
+  // const numberOfOrders = orders.length;
+  // const totalRevenue = Math.round(
+  //   orders.reduce((sum, item) => sum + item.total_price, 0)
+  // );
+
+  // const AverageOrderValue = Math.round(totalRevenue / numberOfOrders);
+
+  // // product details
+  // const totalProductPrice = products.reduce((sum, item) => sum + item.price, 0);
+  // const numberOfProducts = products.length;
+  // const AveragePriceOfProducts = Math.round(
+  //   totalProductPrice / numberOfProducts
+  // );
 
   let messages;
-  if (products.length < 10) {
+  if (listOfProducts.length < 10) {
     messages = [
       {
         role: "system",
-        content: `As a Marketing Analyst,your task is to generate a shop overview by analyzing shop details and Products info provided in the prompt below. Mention shop name, website, products available in the shop, Total Revenue, Average Order Value and generate a response which will later be given to an AI model in a single paragraph format. Notes:Ensure that generated content is informative and keep the content short upto 90 words by not explaining the product description. Stick to the format given in "assistant" role content `,
+        content: `Your task is to create an in-depth Store Super Profile for a Shopify store, utilizing all provided data to generate valuable insights and actionable recommendations. The profile should analyze key aspects like store details, product information, customer demographics, and sales performance. Focus on identifying trends, strengths, weaknesses, and opportunities that can guide future marketing campaigns and revenue growth strategies. The profile should be comprehensive yet concise, aiming for a length of 200-250 words, rich in analysis and practical in its application for the store's marketing and growth`,
       },
+      // {
+      //   role: 'user',
+      //   content: `Generate a shop overview for Shop Name:Tag bot gaming, Shop Domain:www.tagbot.myshopify.com, Region : New york city, USA , listOfProducts:[{"title":"Gaming PC - Titan X1","productType":"Gaming PCs","price":1400},{"title":"Mechanical Gaming Keyboard - HyperStrike","productType":"Gaming Keyboards","price":300},{"title":"Gaming Monitor - QuantumPro X27","productType":"Gaming Monitors","price":800},{"title":"Console Gaming Controller - ProPad 2023","productType":"Gaming Accessories","price":250},{"title":"Wireless Gaming Headset - SoundWave 7.1","productType":"Gaming Headsets","price":300},{"title":"Virtual Reality Kit - VRX1","productType":"Virtual Reality","price":800}],
+      //   )}, Category of products: ['Electronics','accessories'], Total Revenue: $4450, Average Order value: $750, Average price of products: $800 , Default tone used for Marketing: \'casual and formal\' , target audience : \'GenZ\' age groups , Keywords need to excluded are \'Big kill, cool offer, bumper sale\' and  Keywords need to included are \'blissful,huge\'  `,
+      // },
+      // {
+      //   role: 'assistant',
+      //   content: `Tag bot gaming shop located in New york city, USA provides, Gaming PC - Titan X1, Mechanical Gaming Keyboard - HyperStrike, Gaming Monitor - QuantumPro X27, Console Gaming Controller - ProPad 2023, Wireless Gaming Headset - SoundWave 7.1 and Virtual Reality Kit - VRX1. Visit at www.tagbot.myshopify.com . This store provides products in electronics and accessories category, Total revenue of the shop is $4450 , the average order value is $750, average price of products is $800, the default tone for this shop to generate marketing content is set to 'casual and formal', the shop targets GenZ audience and the keywords need to be excluded are Big kill, cool offer, bumper sale and keywords need to be included are blissful, huge`,
+      // },
       {
         role: "user",
-        content: `Generate a shop overview for Shop Name:${shopName} Shop Domain:${shopDomain} Products:${JSON.stringify(
-          products
-        )} Total Revenue:${totalRevenue}  Average Order :${AOV}`,
-      },
-      {
-        role: "assistant",
-        content: `Tag bot gaming shop provides Gaming PC - Titan X1, Mechanical Gaming Keyboard - HyperStrike, Gaming Monitor - QuantumPro X27, Console Gaming Controller - ProPad 2023, Wireless Gaming Headset - SoundWave 7.1 and Virtual Reality Kit - VRX1. Visit at www.tagbot.myshopify.com . Total revenue of the shop is $4450 and the average order value is $750`,
+        content: `Generate a shop overview for Shop Name:${storeName}, Shop Domain:${storeDomain}, Region : ${city}, ${country} , listOfProducts:${JSON.stringify(
+          listOfProducts
+        )}, Category of products: ${categoryOfProducts}, Total Revenue: $${totalRevenue}, Average Order value: $${AverageOrderValue}, Average price of products: $${AveragePriceOfProducts} , Default tone used for Marketing: \'${tone}\' , target audience : \'${keyAudience}\' age groups , Keywords need to excluded are \'${keywordsToBeExcluded.toString()}\' and  Keywords need to included are \'${keywordsToBeIncluded.toString()}\'  `,
       },
     ];
   } else {
     messages = [
       {
         role: "system",
-        content: `As a Marketing Analyst,your task is to generate a shop overview by analyzing shop details and Products info provided in the prompt below and . Mention shop name, website, categories of the products available in the shop, Total Revenue, Average Order Value and generate a response which will later be given to an AI model in a single paragraph format. Notes:Ensure that generated content is informative and keep the content short upto 90 words by not explaining the product description and not including the product title. Stick to the format given in "assistant" role content `,
+        content: `Your task is to create an in-depth Store Super Profile for a Shopify store, utilizing all provided data to generate valuable insights and actionable recommendations. The profile should analyze key aspects like store details, product information, customer demographics, and sales performance. Focus on identifying trends, strengths, weaknesses, and opportunities that can guide future marketing campaigns and revenue growth strategies. The profile should be comprehensive yet concise, aiming for a length of 200-250 words, rich in analysis and practical in its application for the store's marketing and growth `,
       },
+      // {
+      //   role: 'user',
+      //   content: `Generate a shop overview for Shop Name:Tag bot gaming, Shop Domain:www.tagbot.myshopify.com, Region : New york city, USA , listOfProducts:[{"title":"Gaming PC - Titan X1","productType":"Gaming PCs","price":1400},{"title":"Mechanical Gaming Keyboard - HyperStrike","productType":"Gaming Keyboards","price":300},{"title":"Gaming Monitor - QuantumPro X27","productType":"Gaming Monitors","price":800},{"title":"Console Gaming Controller - ProPad 2023","productType":"Gaming Accessories","price":250},{"title":"Wireless Gaming Headset - SoundWave 7.1","productType":"Gaming Headsets","price":300},{"title":"Virtual Reality Kit - VRX1","productType":"Virtual Reality","price":800}],
+      //   )}, Category of products: ['Electronics','accessories'], Total Revenue: $4450, Average Order value: $750, Average price of products: $800 , Default tone used for Marketing: \'casual and formal\' , target audience : \'GenZ\' age groups , Keywords need to excluded are \'Big kill, cool offer, bumper sale\' and  Keywords need to included are \'blissful,huge\'  `,
+      // },
+      // {
+      //   role: 'assistant',
+      //   content: `Tag bot gaming shop provides Gaming PCs, Gaming Keyboards , Monitors, Gaming Controllers, Wireless Headsets. Visit at www.tagbot.myshopify.com. Total revenue of the shop is $4450, the average order value is $750 , average price of products is $800 , the default tone to generate marketing content is set to casual and formal,  the shop targets 25-34 years old people and the words that are prohibited to use in marketing content are Big kill, cool offer, bumper sale and keywords need to be included are blissful, huge`,
+      // },
       {
         role: "user",
-        content: `Generate a shop overview for Shop Name:${shopName} Shop Domain:${shopDomain} Products:${JSON.stringify(
-          products
-        )} Total Revenue:${totalRevenue}  Average Order :${AOV}`,
-      },
-      {
-        role: "assistant",
-        content: `Tag bot gaming shop provides Gaming PCs, Gaming Keyboards , Monitors, Gaming Controllers, Wireless Headsets. Visit at www.tagbot.myshopify.com. Total revenue of the shop is $4450 and the average order value is $750`,
+        content: `Generate a shop overview for Shop Name:${storeName}, Shop Domain:${storeDomain}, Region : ${city}, ${country} , listOfProducts:${JSON.stringify(
+          listOfProducts
+        )}, Category of products: ${categoryOfProducts}, Total Revenue: $${totalRevenue}, Average Order value: $${AverageOrderValue}, Average price of products: $${AveragePriceOfProducts} , Default tone used for Marketing: \'${tone}\' , target audience : \'${keyAudience}\' age groups ,  Keywords need to excluded are \'${keywordsToBeExcluded.toString()}\' and  Keywords need to included are \'${keywordsToBeIncluded.toString()}\'  `,
       },
     ];
   }
+
+  //new end
+
+  // let messages;
+  // if (products.length < 10) {
+  //   messages = [
+  //     {
+  //       role: "system",
+  //       content: `As a Marketing Analyst,your task is to generate a shop overview by analyzing shop details and Products info provided in the prompt below. Mention shop name, website, products available in the shop, Total Revenue, Average Order Value and generate a response which will later be given to an AI model in a single paragraph format. Notes:Ensure that generated content is informative and keep the content short upto 90 words by not explaining the product description. Stick to the format given in "assistant" role content `,
+  //     },
+  //     {
+  //       role: "user",
+  //       content: `Generate a shop overview for Shop Name:${shopName} Shop Domain:${shopDomain} Products:${JSON.stringify(
+  //         products
+  //       )} Total Revenue:${totalRevenue}  Average Order :${AOV}`,
+  //     },
+  //     {
+  //       role: "assistant",
+  //       content: `Tag bot gaming shop provides Gaming PC - Titan X1, Mechanical Gaming Keyboard - HyperStrike, Gaming Monitor - QuantumPro X27, Console Gaming Controller - ProPad 2023, Wireless Gaming Headset - SoundWave 7.1 and Virtual Reality Kit - VRX1. Visit at www.tagbot.myshopify.com . Total revenue of the shop is $4450 and the average order value is $750`,
+  //     },
+  //   ];
+  // } else {
+  //   messages = [
+  //     {
+  //       role: "system",
+  //       content: `As a Marketing Analyst,your task is to generate a shop overview by analyzing shop details and Products info provided in the prompt below and . Mention shop name, website, categories of the products available in the shop, Total Revenue, Average Order Value and generate a response which will later be given to an AI model in a single paragraph format. Notes:Ensure that generated content is informative and keep the content short upto 90 words by not explaining the product description and not including the product title. Stick to the format given in "assistant" role content `,
+  //     },
+  //     {
+  //       role: "user",
+  //       content: `Generate a shop overview for Shop Name:${shopName} Shop Domain:${shopDomain} Products:${JSON.stringify(
+  //         products
+  //       )} Total Revenue:${totalRevenue}  Average Order :${AOV}`,
+  //     },
+  //     {
+  //       role: "assistant",
+  //       content: `Tag bot gaming shop provides Gaming PCs, Gaming Keyboards , Monitors, Gaming Controllers, Wireless Headsets. Visit at www.tagbot.myshopify.com. Total revenue of the shop is $4450 and the average order value is $750`,
+  //     },
+  //   ];
+  // }
 
   const completion = await openai.chat.completions.create({
     messages,
@@ -614,204 +695,216 @@ app.get("/email-generation/v3", async (req, res) => {
   console.log(chalk.green(JSON.stringify(result)));
 });
 
-app.get("/email-generation", async (req, res) => {
-  //configured with the tone, length and keywords fields//
-  const {
-    context,
-    shopDomain,
-    firstName,
-    lastName,
-    customerBehavior,
-    productOffering,
-    shopName,
-    coupon,
-    tone,
-    keywords,
-    targetAudience,
-    eventName,
-    eventDate,
-  } = req.body;
+// app.get("/email-generation", async (req, res) => {
+//   //configured with the tone, length and keywords fields//
+//   const {
+//     storeDomain,
+//     storeName,
+//     keywords,
+//     context,
+//     eventName,
+//     brandTone,
+//     eventDate,
+//     promoCode,
+//     storeSuperProfile,
+//     keyAudience: targetAudience,
+//     firstName,
+//     lastName,
+//     customerBehavior,
+//     campaignId,
+//     language,
+//   } = req.body
 
-  const messages = [
-    {
-      role: "system",
-      content: `As a Marketing manager, your goal is to craft an email  for my personalized email marketing campaign to my shop's customers based on the prompt below. The email should adopt the tone and the targeted audience described below. Keep the email body concise not more than 80 words and please respond in the same format as the 'assistant' role content but as per the tone and the targeted audience mentioned in the prompt. Do not provide any coupon or promo codes on your own. If a coupon code is provided in the prompt,emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the email format, please create a JSON object. In the 'subject' field, include details about the campaign context,event name if provided, the 'shop name', and the 'customer name' and incorporate emojis only in 'subject' field. In the 'body' field, provide the context using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and recommend the products mentioned on the Shop description not on the Customer description . Keep the response as short as the given character limit. Additionally, please remember to conclude the email with the mention of the shop name.`,
-    },
-    {
-      role: "user",
-      content: `Generate a ${tone} tone marketing email tailored to ${targetAudience} audience for the Customer ${firstName} ${lastName} for upcoming ${context}, ${
-        eventName ? `Event : ${eventName}` : ``
-      } ${
-        eventDate ? `Starts on : ${eventDate}` : ``
-      }, Customer Description: ${customerBehavior} and Shop Description: ${productOffering}, ${
-        coupon ? `Coupon Code : ${coupon}` : ``
-      } , Shop Website: ${shopDomain}, Shop name: ${shopName}, and avoid using these words such as \'${keywords.toString()}\' in the response.`,
-    },
-    {
-      role: "assistant",
-      content: `{"subject": "🎉 Bigg Billion Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
+//   const messages = [
+//     {
+//       role: 'system',
+//       content: `As a Marketing manager, your goal is to craft an email for my personalized email marketing campaign to my shop's customers based on the prompt below. The email should adopt the tone and the targeted audience described below. Keep the email body concise not more than 80 words and please respond in the same format as the 'assistant' role content but as per the tone, targeted audience and the language mentioned in the prompt. Do not provide any coupon or promo codes on your own. If a coupon code is provided in the prompt,emphasize it in the email content using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the email format, please create a JSON object. In the 'subject' field, include details about the campaign context,event name if provided, the 'shop name', and the 'customer name' and incorporate emojis only in 'subject' field. In the 'body' field, provide the context using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and recommend the products mentioned on the Shop description not on the Customer description . Keep the response as short as the given character limit and mention the event date if provided. Additionally,remember to conclude the email with the mention of the shop name and the important note is that the email should not look like AI generated, it should look like a conversational human processed mail with a personal touch.`,
+//     },
+//     {
+//       role: 'user',
+//       content: `Generate a ${brandTone} tone marketing email ${
+//         language ? `in ${language}` : ``
+//       } tailored to ${targetAudience} audience for the Customer ${firstName} ${lastName} for upcoming ${context}, ${
+//         eventName ? `Event : ${eventName}` : ``
+//       } ${
+//         eventDate ? `Starts on : ${eventDate}` : ``
+//       }, Customer Description: ${customerBehavior} and Shop Description: ${storeSuperProfile}, ${
+//         promoCode ? `Coupon Code : \'${promoCode}\'` : ``
+//       } , Shop Website: ${storeDomain}, Shop name: ${storeName}, and avoid using these words such as \'${keywords.toString()}\' in the response.`,
+//     },
+//     {
+//       role: 'assistant',
+//       content: `{"subject": "🎉 Bigg Billion Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
 
-      I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Christmas! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
-      
-      At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You definitely won't want to miss out on this fantastic offer!
-      
-      Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "**FIRST20**" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only!
-      
-      Happy shopping, and together, let's conquer those fitness goals!
-      
-      Warmest regards,
-      LA Fitness Pro "
-      }`,
-    },
-  ];
+//     I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Christmas! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
 
-  const completion = await openai.chat.completions.create({
-    messages,
-    model: "gpt-3.5-turbo-0613",
-    temperature: 0.4,
-  });
-  const response = {
-    role: completion.choices[0].message.role,
-    content: completion.choices[0].message.content,
-    prompt_tokens: completion.usage.prompt_tokens,
-    completion_tokens: completion.usage.completion_tokens,
-    total_tokens: completion.usage.total_tokens,
-  };
+//     At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You defiemail-generationnitely won't want to miss out on this fantastic offer!
 
-  const result = [
-    messages[0],
-    messages[1],
-    { role: response.role, content: response.content },
-  ];
-  console.log(chalk.red(JSON.stringify(result)));
-  res.send(response);
-});
+//     Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "**FIRST20**" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only!
 
-app.get("/whatsapp-message", async (req, res) => {
-  const {
-    context,
-    shopDomain,
-    firstName,
-    lastName,
-    customerBehavior,
-    productOffering,
-    shopName,
-    coupon,
-    tone,
-    keywords,
-    targetAudience,
-    eventName,
-    eventDate,
-  } = req.body;
+//     Happy shopping, and together, let's conquer those fitness goals!
 
-  const messages = [
-    {
-      role: "system",
-      content: `As a Marketing manager, your goal is to craft a WhatsApp message for my personalized WhatsApp marketing campaign to my shop's customers based on the prompt below. The response should adopt the tone and the targeted audience described below. Keep the email body concise and please respond in the same format as the 'assistant' role content but as per the tone and the targeted audience mentioned in the prompt.Stop generating any new coupon or promo codes. Only if a coupon code is provided in the prompt, emphasize it in the response body using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the message format, please create a JSON object. In the 'shopName' field, include the shop's name. In the 'subject' field, include the campaign context or event name if provided and a small customer greeting. In the 'body' field, mention the context and provide the response using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and only recommend the products mentioned on the Shop description not on the Customer description . Keep the response as short as 60 words, incorporate emojis. Additionally, please remember to conclude the message with the mention of the shop name.`,
-    },
-    {
-      role: "user",
-      content: `Generate a ${tone} tone marketing whatsapp message tailored to ${targetAudience} for Customer ${firstName} ${lastName} for upcoming ${context}, ${
-        eventName ? `Event : ${eventName}` : ``
-      } ${
-        eventDate ? `Starts on : ${eventDate}` : ``
-      }, Customer Description: ${customerBehavior} and Shop Description: ${productOffering} , ${
-        coupon ? `Coupon code: ${coupon}` : ``
-      } , Shop Website: ${shopDomain} Shop name: ${shopName}, and avoid using these words such as  \'${keywords.toString()}\' in the response.`,
-    },
-    {
-      role: "assistant",
-      content: `{"shopName": "Tagbot Gaming 👋",
-      "subject": "Big billion sale is Here , Emma Mackey!",
-      "body": "🎮🔥Discover the future of entertainment for this Halloween with our latest electronics lineup such as 🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, and ❄️ Cooler Master Air Cooler.\n\n🌟Use code **BOT30** to enjoy a 30% discount on Keyboards 🌟 Shop now www.tagbotgaming.myshopify.com .\n\n✨ Happy gaming, Emma! 🚀\n\nBest regards,\nTagbot Gaming Shop Team"
-      " }`,
-    },
-  ];
+//     Warmest regards,
+//     LA Fitness Pro "
+//     }`,
+//     },
+//   ];
 
-  const completion = await openai.chat.completions.create({
-    messages,
-    model: "gpt-3.5-turbo-0613",
-    temperature: 0.2,
-  });
-  const response = {
-    role: completion.choices[0].message.role,
-    content: completion.choices[0].message.content,
-    prompt_tokens: completion.usage.prompt_tokens,
-    completion_tokens: completion.usage.completion_tokens,
-    total_tokens: completion.usage.total_tokens,
-  };
+//   const completion = await openai.chat.completions.create({
+//     messages,
+//     model: "gpt-3.5-turbo-0613",
+//     temperature: 0.4,
+//   });
+//   const response = {
+//     role: completion.choices[0].message.role,
+//     content: completion.choices[0].message.content,
+//     prompt_tokens: completion.usage.prompt_tokens,
+//     completion_tokens: completion.usage.completion_tokens,
+//     total_tokens: completion.usage.total_tokens,
+//   };
 
-  const result = [
-    messages[0],
-    messages[1],
-    { role: response.role, content: response.content },
-  ];
-  console.log(chalk.red(JSON.stringify(result)));
-  res.send(response);
-});
+//   const result = [
+//     messages[0],
+//     messages[1],
+//     { role: response.role, content: response.content },
+//   ];
+//   console.log(chalk.red(JSON.stringify(result)));
+//   res.send(response);
+// });
 
-app.get("/sms", async (req, res) => {
-  const {
-    context,
-    shopDomain,
-    firstName,
-    lastName,
-    customerBehavior,
-    productOffering,
-    shopName,
-    coupon,
-    tone,
-    keywords,
-    targetAudience,
-    eventName,
-    eventDate,
-  } = req.body;
+// app.get("/whatsapp-message", async (req, res) => {
+//   const {
+//     storeDomain,
+//     storeName,
+//     keywords,
+//     context,
+//     eventName,
+//     brandTone,
+//     eventDate,
+//     promoCode,
+//     storeSuperProfile,
+//     keyAudience: targetAudience,
+//     firstName,
+//     lastName,
+//     customerBehavior,
+//     campaignId,
+//     language,
+//   } = req.body
 
-  const messages = [
-    {
-      role: "system",
-      content: `As a Marketing manager, your goal is to craft a SMS message for my personalized SMS marketing campaign to my shop's customers based on the prompt below. The message should adopt the tone and the targeted audience described below. Keep the sms body concise and please respond in the same format as the 'assistant' role content but as per the tone and the targeted audience mentioned in the prompt. Stop generating any new coupon or promo codes. Only if a coupon code is provided in the prompt, emphasize it in the response body using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the message format, please create a JSON object. In the 'shopName' field, include the shop's name. In the 'subject' field, include the campaign context or event name if provided and a small customer greeting.In the 'body' field, provide the sms context using the 'Customer LTB model' that understands the customer's behavior and order history and read the 'Shop Description' provided below and only  recommend the products mentioned on the Shop description not on the Customer description and include the provided coupon code . Keep the response short not more than 40 characters. Additionally, please remember to conclude the message with the mention of the shop name.`,
-    },
-    {
-      role: "user",
-      content: `Generate a ${tone} tone  marketing SMS message tailored to ${targetAudience}  for Customer ${firstName} ${lastName} for upcoming ${context},  ${
-        eventName ? `Event : ${eventName}` : ``
-      } ${
-        eventDate ? `Starts on : ${eventDate}` : ``
-      },Customer Description: ${customerBehavior} and Shop Description: ${productOffering} , ${
-        coupon ? `Coupon Code : \'${coupon}\'` : ``
-      }, Shop Website: ${shopDomain} Shop name: ${shopName}, and avoid using these words such as \'${keywords.toString()}\' in the response.`,
-    },
-    {
-      role: "assistant",
-      content: `{"shopName": "Tagbot Gaming",
-      "subject": "Big billion sale is Here for this Halloween, Emma Mackey!",
-      "body": " Tagbot Gaming Shop gives a special offer just for you. Use code **PUSH30** to enjoy a 30% discount on Logitech Keyboard with RGB Red Switch!. Shop now : www.tagbotgaming.myshopify.com \n\n"
-      " }`,
-    },
-  ];
+//   const messages = [
+//     {
+//       role: "system",
+//       content: `As a Marketing manager, your goal is to craft a WhatsApp message for my personalized WhatsApp marketing campaign to my shop's customers based on the prompt below. The response should adopt the tone and the targeted audience described below. Keep the email body concise and please respond in the same format as the 'assistant' role content but as per the tone and the targeted audience mentioned in the prompt.Stop generating any new coupon or promo codes. Only if a coupon code is provided in the prompt, emphasize it in the response body using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the message format, please create a JSON object. In the 'shopName' field, include the shop's name. In the 'subject' field, include the campaign context or event name if provided and a small customer greeting. In the 'body' field, mention the context and provide the response using the 'Customer LTB model' that understands the customer's behavior and read the 'Shop Description' provided below and only recommend the products mentioned on the Shop description not on the Customer description . Keep the response as short as 60 words, incorporate emojis. Additionally, please remember to conclude the message with the mention of the shop name.`,
+//     },
+//     {
+//       role: 'user',
+//       content: `Generate a ${brandTone} tone marketing whatsapp message ${
+//         language ? `in ${language}` : ``
+//       } tailored to ${targetAudience} for Customer ${firstName} ${lastName} for upcoming ${context}, ${
+//         eventName ? `Event : ${eventName}` : ``
+//       } ${
+//         eventDate ? `Starts on : ${eventDate}` : ``
+//       }, Customer Description: ${customerBehavior} and Shop Description: ${storeSuperProfile} , ${
+//         promoCode ? `Coupon Code : \'${promoCode}\'` : ``
+//       } , Shop Website: ${storeDomain} Shop name: ${storeName}, and avoid using these words such as  \'${keywords.toString()}\' in the response.`,
+//     },
+//     {
+//       role: "assistant",
+//       content: `{"shopName": "Tagbot Gaming 👋",
+//       "subject": "Big billion sale is Here , Emma Mackey!",
+//       "body": "🎮🔥Discover the future of entertainment for this Halloween with our latest electronics lineup such as 🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, and ❄️ Cooler Master Air Cooler.\n\n🌟Use code **BOT30** to enjoy a 30% discount on Keyboards 🌟 Shop now www.tagbotgaming.myshopify.com .\n\n✨ Happy gaming, Emma! 🚀\n\nBest regards,\nTagbot Gaming Shop Team"
+//       " }`,
+//     },
+//   ];
 
-  const completion = await openai.chat.completions.create({
-    messages,
-    model: "gpt-3.5-turbo-0613",
-    temperature: 0.3,
-  });
-  const response = {
-    role: completion.choices[0].message.role,
-    content: completion.choices[0].message.content,
-    prompt_tokens: completion.usage.prompt_tokens,
-    completion_tokens: completion.usage.completion_tokens,
-    total_tokens: completion.usage.total_tokens,
-  };
+//   const completion = await openai.chat.completions.create({
+//     messages,
+//     model: "gpt-3.5-turbo-0613",
+//     temperature: 0.2,
+//   });
+//   const response = {
+//     role: completion.choices[0].message.role,
+//     content: completion.choices[0].message.content,
+//     prompt_tokens: completion.usage.prompt_tokens,
+//     completion_tokens: completion.usage.completion_tokens,
+//     total_tokens: completion.usage.total_tokens,
+//   };
 
-  const result = [
-    messages[0],
-    messages[1],
-    { role: response.role, content: response.content },
-  ];
-  console.log(chalk.red(JSON.stringify(result)));
-  res.send(response);
-});
+//   const result = [
+//     messages[0],
+//     messages[1],
+//     { role: response.role, content: response.content },
+//   ];
+//   console.log(chalk.red(JSON.stringify(result)));
+//   res.send(response);
+// });
+
+// app.get("/sms", async (req, res) => {
+//   const {
+//     storeDomain,
+//     storeName,
+//     keywords,
+//     context,
+//     eventName,
+//     brandTone,
+//     eventDate,
+//     promoCode,
+//     storeSuperProfile,
+//     keyAudience: targetAudience,
+//     firstName,
+//     lastName,
+//     customerBehavior,
+//     campaignId,
+//     language,
+//   } = req.body
+
+//   const messages = [
+//     {
+//       role: 'system',
+//       content: `As a Marketing manager, your goal is to craft a SMS message for my personalized SMS marketing campaign to my shop's customers based on the prompt below. The message should adopt the tone and the targeted audience described below. Keep the sms body concise and please respond in the same format as the 'assistant' role content but as per the tone, the targeted audience and the language mentioned in the prompt. Do not provide any coupon code or promo code on your own. If a coupon code is provided in the prompt,then emphasize it in the sms body using bold letters. Remember to avoid using any SPAM-related words in the subject or body. For the message format, please create a JSON object. In the 'greetings' field, include a happy greeting with the customer's name. In the 'subject' field, include only the campaign context event name if provided.In the 'body' field, provide the sms context using the 'Customer LTB model' that understands the customer's behavior and order history and read the 'Shop Description' provided below and recommend the products mentioned on the Shop description not on the Customer description and include the provided coupon code . Keep the response short not more than 30 characters and incorporate emojis. Additionally, remember to conclude the message with the mention of the shop name the important note is that the content should not look like AI generated, it should look like a conversational human processed content with a personal touch.`,
+//     },
+//     {
+//       role: 'user',
+//       content: `Generate a ${brandTone} tone marketing SMS message ${
+//         language ? `in ${language}` : ``
+//       } tailored to ${targetAudience}  for Customer ${firstName} ${lastName} for upcoming ${context},  ${
+//         eventName ? `Event : ${eventName}` : ``
+//       } ${
+//         eventDate ? `Starts on : ${eventDate}` : ``
+//       },Customer Description: ${customerBehavior} and Shop Description: ${storeSuperProfile} , ${
+//         promoCode ? `Coupon Code : \'${promoCode}\'` : ``
+//       }, Shop Website: ${storeDomain} Shop name: ${storeName}, and avoid using these words such as \'${keywords.toString()}\' in the response.`,
+//     },
+//     {
+//       role: 'assistant',
+//       content: `{"greetings": "Hi Emma Mackey! 👋",
+//       "subject": "🔥Big billion sale is Here for this Halloween, Emma Mackey!🔥",
+//       "body": "🎮 Tagbot Gaming Shop gives a special offer just for you. Use code **PUSH30** to enjoy a 30% discount on ⌨️ Logitech Keyboard with RGB Red Switch!  🌟 Visit now : www.tagbotgaming.myshopify.com \n\n✨"
+//       " }`,
+//     },
+//   ];
+
+//   const completion = await openai.chat.completions.create({
+//     messages,
+//     model: "gpt-3.5-turbo-0613",
+//     temperature: 0.3,
+//   });
+//   const response = {
+//     role: completion.choices[0].message.role,
+//     content: completion.choices[0].message.content,
+//     prompt_tokens: completion.usage.prompt_tokens,
+//     completion_tokens: completion.usage.completion_tokens,
+//     total_tokens: completion.usage.total_tokens,
+//   };
+
+//   const result = [
+//     messages[0],
+//     messages[1],
+//     { role: response.role, content: response.content },
+//   ];
+//   console.log(chalk.red(JSON.stringify(result)));
+//   res.send(response);
+// });
 
 app.get("/finetune-job-creation", async (req, res) => {
   //create and upload the file
@@ -1075,10 +1168,43 @@ app.get("/finetune-whatsapp-message", async (req, res) => {
   res.send(result);
 });
 
+app.get("/language-change", async (req, res) => {
+  const { payload, language } = req.body;
 
-app.get('/language-change')
+  const messages = [
+    {
+      role: "system",
+      content: `Your goal is to translate the given marketing email into the required language mentioned below without changing the format and content of the email`,
+    },
+    {
+      role: "user",
+      content: `Translate this email ${payload} to ${language}`,
+    },
+  ];
 
-app.get('/multi-language',async(req,res)=>{
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.2,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+});
+
+app.get("/multi-language", async (req, res) => {
   const {
     context,
     shopDomain,
@@ -1093,7 +1219,7 @@ app.get('/multi-language',async(req,res)=>{
     targetAudience,
     eventName,
     eventDate,
-    language
+    language,
   } = req.body;
 
   const messages = [
@@ -1103,7 +1229,9 @@ app.get('/multi-language',async(req,res)=>{
     },
     {
       role: "user",
-      content: `Generate a ${tone} tone marketing email ${language?`in ${language}`:``} tailored to ${targetAudience} audience for the Customer ${firstName} ${lastName} for upcoming ${context}, ${
+      content: `Generate a ${tone} tone marketing email ${
+        language ? `in ${language}` : ``
+      } tailored to ${targetAudience} audience for the Customer ${firstName} ${lastName} for upcoming ${context}, ${
         eventName ? `Event : ${eventName}` : ``
       } ${
         eventDate ? `Starts on : ${eventDate}` : ``
@@ -1114,18 +1242,18 @@ app.get('/multi-language',async(req,res)=>{
     {
       role: "assistant",
       content: `{"subject": "🎉 Bigg Billion Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
-
-      I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Christmas! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
-      
-      At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You definitely won't want to miss out on this fantastic offer!
-      
-      Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "**FIRST20**" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only . Starts on 23-12-2019!
-      
-      Happy shopping, and together, let's conquer those fitness goals!
-      
-      Warmest regards,
-      LA Fitness Pro "
-      }`,
+  
+        I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Christmas! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
+  
+        At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You definitely won't want to miss out on this fantastic offer!
+  
+        Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "**FIRST20**" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only . Starts on 23-12-2019!
+  
+        Happy shopping, and together, let's conquer those fitness goals!
+  
+        Warmest regards,
+        LA Fitness Pro "
+        }`,
     },
   ];
 
@@ -1149,7 +1277,518 @@ app.get('/multi-language',async(req,res)=>{
   ];
   console.log(chalk.red(JSON.stringify(result)));
   res.send(response);
-})
+});
+
+app.get("/score", async (req, res) => {
+  let allEvents = [];
+
+  async function readFunction() {
+    try {
+      const data = await readFileAsync("events.json");
+      const eventData = JSON.parse(data);
+      eventData.forEach((event) => {
+        allEvents.push(event.Subject);
+      });
+    } catch (error) {
+      console.error("Error reading or parsing JSON:", error);
+    }
+  }
+
+  function readFileAsync(filePath) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+
+  await readFunction();
+  let scoreData = [];
+  // Define a function to process batches
+  async function processBatches() {
+    let batchSize = 20;
+
+    for (let i = 0; i < allEvents.length; i += batchSize) {
+      let batch = allEvents.slice(i, i + batchSize);
+      await getScore(batch);
+    }
+
+    res.send(scoreData);
+  }
+
+  async function getScore(batch) {
+    let tbody = {
+      eventList: batch,
+      storeDescription: `Fashionista Boutique is a trendy online shop that offers a wide range of fashionable products. From Women's Floral Maxi Dresses to Men's Slim-Fit Suits, Designer Handbags, Men's Leather Brogue Shoes, Women's Sunglasses, and Men's Casual T-Shirts, they have something for everyone. With a total revenue of $1500 and an average order value of $700, The average price of products is $32. The marketing tone used by the shop is formal, targeting the Gen Z age group. Keywords such as "good" and "bad" are included, while "test" and "highprice" are excluded. Visit their website at www.fashionistaboutique.com to explore their collection.
+     `,
+    };
+
+    const messages = [
+      {
+        role: "user",
+        content: `I will provide you a json object ${JSON.stringify(
+          tbody
+        )} . In this, you will see a list of events, which are the list of holidays in real world, and the store description. I want you to read both and understand the type of products the store is selling and I need you to score out of 100 each event which is more appropriate to the store. The score is about listing the holidays which might be a selling point of the store.For example, electronics store will get high score for Black friday event. Give the response as array of json objects without any object wrapper with only two fields in it, "Subject" of the events and "score" .`,
+      },
+    ];
+    console.log(messages);
+    const completion = await openai.chat.completions.create({
+      messages,
+      model: "gpt-3.5-turbo-16k-0613",
+      temperature: 0.1,
+    });
+    const generatedContent = completion.choices[0].message.content;
+    let parsedContent;
+    try {
+      parsedContent = JSON.parse(generatedContent);
+    } catch (error) {
+      console.log("Invalid gpt format");
+    }
+    if (parsedContent) {
+      parsedContent.map((element) => {
+        scoreData.push(element);
+      });
+      console.log(scoreData);
+    }
+  }
+  processBatches();
+  // const response = {
+  //   role: completion.choices[0].message.role,
+  //   content: completion.choices[0].message.content,
+  //   prompt_tokens: completion.usage.prompt_tokens,
+  //   completion_tokens: completion.usage.completion_tokens,
+  //   total_tokens: completion.usage.total_tokens,
+  // };
+
+  // const result = [
+  //   messages[0],
+  //   messages[1],
+  //   { role: response.role, content: response.content },
+  // ];
+  // console.log(chalk.red(JSON.stringify(result)));
+  // let end=JSON.parse(response.content)
+  // console.log(JSON.parse(response.content));
+  // res.send(response);
+});
+
+app.get("/category", async (req, res) => {
+  const shopifyStore = "jinx2g";
+  const accessToken = "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";
+
+  const collectUrl = `https://${shopifyStore}.myshopify.com/admin/api/2023-10/collects.json`;
+
+  const collectOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": accessToken,
+    },
+  };
+
+  const categories = [];
+  let collectionIds = [];
+  fetch(collectUrl, collectOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const uniqueCollectionIds = Array.from(
+        new Set(data.collects.map((collect) => collect.collection_id))
+      );
+      console.log(uniqueCollectionIds);
+      collectionIds = uniqueCollectionIds;
+    })
+    .then(() => {
+      collectionIds.map((id) => {
+        const apiUrl = `https://${shopifyStore}.myshopify.com/admin/api/2023-10/collections/${id}.json`;
+
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Shopify-Access-Token": accessToken,
+          },
+        };
+        fetch(apiUrl, requestOptions)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            categories.push(data.title);
+          });
+      });
+    })
+
+    .catch((error) => {
+      console.error("Error: ", error);
+    });
+});
+
+//testing new prompts
+
+app.get("/email-generation", async (req, res) => {
+  //configured with the tone, length and keywords fields//
+  const {
+    storeDomain,
+    storeName,
+    keywords,
+    context,
+    eventName,
+    brandTone,
+    eventDate,
+    promoCode,
+    storeSuperProfile,
+    keyAudience: targetAudience,
+    firstName,
+    lastName,
+    customerBehavior,
+    campaignId,
+    language,
+  } = req.body;
+
+  const messages = [
+    {
+      role: "system",
+      content: `Compose a promotional email of 100-200 words with a compelling subject line of 50-60 characters. The email should have a strong opening, a concise and informative body, and a clear call-to-action. Use the Store Super Profile and Customer Super Profile to personalize the content, aligning with the store's brand and the customer's interests. Ensure the email is mobile-friendly and includes relevant visuals to enhance engagement.`,
+    },
+    {
+      role: "user",
+      content: `Generate a ${brandTone} tone marketing email ${
+        language ? `in ${language}` : ``
+      } tailored to ${targetAudience} audience for the Customer ${firstName} ${lastName} for upcoming ${context}, ${
+        eventName ? `Event : ${eventName}` : `  `
+      } ${
+        eventDate ? `Starts on : ${eventDate}` : ``
+      }, Customer Description: ${customerBehavior} and Shop Description: ${storeSuperProfile}, ${
+        promoCode ? `Coupon Code : \'${promoCode}\'` : ``
+      } , Shop Website: ${storeDomain}, Shop name: ${storeName}, and avoid using these words such as \'${keywords.toString()}\' in the response.  Include a subject line, opening line, body content, and call-to-action. Emphasize mobile readability and visual appeal.`,
+    },
+    // {
+    //   role: 'assistant',
+    //   content: `{"subject": "🎉 Bigg Billion Sale for Michael Anderson 🎉","body": "Hello Michael Anderson,
+
+    // I hope this message finds you in excellent health and high spirits, ready to embark on an exciting new chapter in your fitness journey this Christmas! After closely examining your order history, it's evident that you possess a discerning taste for top-quality fitness equipment.
+
+    // At LA Fitness Pro, we offer a comprehensive range of fitness gear that includes everything from Olympic Barbell Sets and Adjustable Dumbbell Pairs to Weight Benches with Racks and Protein Powders. It's all here, and it's all of the highest quality. This Black Friday presents a golden opportunity to elevate your fitness routine with premium gear, all at unbeatable prices. You defiemail-generationnitely won't want to miss out on this fantastic offer!
+
+    // Visit our online store at www.lafitnesspro.myshopify.com and start filling up your shopping cart today. To kickstart your shopping experience, don't forget to use the exclusive coupon code "**FIRST20**" during checkout to enjoy a special discount on your inaugural purchase. But don't wait too long – these exceptional deals are available for a limited time only!
+
+    // Happy shopping, and together, let's conquer those fitness goals!
+
+    // Warmest regards,
+    // LA Fitness Pro "
+    // }`,
+    // },
+  ];
+
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.4,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+});
+
+app.get("/whatsapp-message", async (req, res) => {
+  const {
+    storeDomain,
+    storeName,
+    keywords,
+    context,
+    eventName,
+    brandTone,
+    eventDate,
+    promoCode,
+    storeSuperProfile,
+    keyAudience: targetAudience,
+    firstName,
+    lastName,
+    customerBehavior,
+    campaignId,
+    language,
+  } = req.body;
+
+  const messages = [
+    {
+      role: "system",
+      content: `Craft a concise WhatsApp promotional message within 30-50 words. The message should be informal and engaging, highlighting the main offer and including an immediate call-to-action. Personalize the message based on the customer's interests and preferences from their Super Profile. Ensure the message is direct and captures the essence of the promotion.`,
+    },
+    {
+      role: "user",
+      content: `Generate a ${brandTone} tone marketing whatsapp message ${
+        language ? `in ${language}` : ``
+      } tailored to ${targetAudience} for Customer ${firstName} ${lastName} for upcoming ${context}, ${
+        eventName ? `Event : ${eventName}` : ``
+      } ${
+        eventDate ? `Starts on : ${eventDate}` : ``
+      }, Customer Description: ${customerBehavior} and Shop Description: ${storeSuperProfile} for a personalized touch, ${
+        promoCode ? `Coupon Code : \'${promoCode}\'` : ``
+      } , Shop Website: ${storeDomain} Shop name: ${storeName}, and avoid using these words such as  \'${keywords.toString()}\' succinctly with a direct call-to-action.`,
+    },
+    // {
+    //   role: "assistant",
+    //   content: `{"shopName": "Tagbot Gaming 👋",
+    //   "subject": "Big billion sale is Here , Emma Mackey!",
+    //   "body": "🎮🔥Discover the future of entertainment for this Halloween with our latest electronics lineup such as 🖱️ Corsair Gaming Mouse, ⌨️ Logitech Keyboard with RGB Red Switch, 🎧 Red Gear Gaming Headset, 💽 NVME SSD, and ❄️ Cooler Master Air Cooler.\n\n🌟Use code **BOT30** to enjoy a 30% discount on Keyboards 🌟 Shop now www.tagbotgaming.myshopify.com .\n\n✨ Happy gaming, Emma! 🚀\n\nBest regards,\nTagbot Gaming Shop Team"
+    //   " }`,
+    // },
+  ];
+
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.2,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+});
+
+app.get("/sms", async (req, res) => {
+  const {
+    storeDomain,
+    storeName,
+    keywords,
+    context,
+    eventName,
+    brandTone,
+    eventDate,
+    promoCode,
+    storeSuperProfile,
+    keyAudience: targetAudience,
+    firstName,
+    lastName,
+    customerBehavior,
+    campaignId,
+    language,
+  } = req.body;
+
+  const messages = [
+    {
+      role: "system",
+      content: `Create a promotional SMS within a 160-character limit. The message should be straightforward, clearly presenting the promotion with an engaging tone. Include a direct call-to-action. Tailor the message to the customer using insights from their Super Profile, focusing on relevancy and impact.`,
+    },
+    {
+      role: "user",
+      content: `Generate a ${brandTone} tone marketing SMS message ${
+        language ? `in ${language}` : ``
+      } tailored to ${targetAudience}  for Customer ${firstName} ${lastName} for upcoming ${context},  ${
+        eventName ? `Event : ${eventName}` : ``
+      } ${
+        eventDate ? `Starts on : ${eventDate}` : ``
+      },Customer Description: ${customerBehavior} and Shop Description: ${storeSuperProfile} , ${
+        promoCode ? `Coupon Code : \'${promoCode}\'` : ``
+      }, Shop Website: ${storeDomain} Shop name: ${storeName}, and avoid using these words such as \'${keywords.toString()}\' in the response.`,
+    },
+    // {
+    //   role: 'assistant',
+    //   content: `{"greetings": "Hi Emma Mackey! 👋",
+    //   "subject": "🔥Big billion sale is Here for this Halloween, Emma Mackey!🔥",
+    //   "body": "🎮 Tagbot Gaming Shop gives a special offer just for you. Use code **PUSH30** to enjoy a 30% discount on ⌨️ Logitech Keyboard with RGB Red Switch!  🌟 Visit now : www.tagbotgaming.myshopify.com \n\n✨"
+    //   " }`,
+    // },
+  ];
+
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.3,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+});
+
+app.get("/customer-behavior/", async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    city,
+    country,
+    joinedDate,
+    orders,
+    emailMarketingConsent,
+  } = req.body;
+
+  const numberOfOrders = orders.length;
+  let totalSpent = 0;
+
+  for (const order of orders) {
+    totalSpent += order.price;
+  }
+  const AOV = Math.round(totalSpent / numberOfOrders);
+  const lastPurchase = orders.reduce((latest, item) => {
+    if (new Date(item.purchasedOn) > new Date(latest.purchasedOn)) {
+      return item;
+    }
+    return latest;
+  }, orders[0]);
+  let messages;
+  if (orders.length < 10) {
+    messages = [
+      {
+        role: "system",
+        content: `Construct a detailed Customer Super Profile from the provided data of a Shopify store's customer. Analyze the customer's purchase history, product preferences, average spend, browsing behavior, email interactions, and demographic information. The profile should not only summarize these aspects but also interpret them to reveal the customer's buying habits, favored product categories, and engagement with past marketing initiatives. Highlight patterns or preferences that could inform personalized marketing strategies. Aim to create a profile that is insightful for tailoring future marketing efforts and product recommendations to this customer.`,
+      },
+      // {
+      //   role: 'user',
+      //   content: `Generate a customer behavior for Customer Name: John Doe , Region: New york USA, Joining Date:'2022-08-21T08:45:20.567Z',Order History:[{"title":"KZ Diamond Necklace","price":2000,"purchasedOn":"2023-08-01T10:00:00.000Z"},{"title":"Gold Ring","price":500,"purchasedOn":"2023-08-10T10:00:00.000Z"},{"title":"ZARA Shirts","price":100,"purchasedOn":"2023-08-20T10:00:00.000Z"},{"title":"Nike T-shirts","price":50,"purchasedOn":"2023-08-30T10:00:00.000Z"}] Total Spent:$2650, Number of Orders: 4 , Average Order Value:$662, Recent Purchase:"Nike T-shirts". Accepts Marketing : yes`,
+      // },
+      // {
+      //   role: 'assistant',
+      //   content: `Customer Mr.John Doe is from New york USA and he is interested in high-end items like KZ diamond necklace and Gold ring, which fall within the jewelry category, and fashion items because he purchased ZARA shirts, Nike T-shirts.John is therefore more drawn to the areas of jewelry and fashion and he can be tagged as "Frequent Purchaser, Recent joiner", since he bought 4 items.Mr John doe has been a very promising customer since august 21 and has spent a whopping 2650 dollars and his average order value is 662  and allows marketing recommendations.Overall,John Doe resides in USA, prefers to purchase expensive, high-quality jewelry and clothing.`,
+      // },
+      {
+        role: "user",
+        content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country}, Joining Date:${joinedDate
+          .toLocaleString()
+          .slice(0, 10)},Order History:${JSON.stringify(
+          orders
+        )} Total Spent:$${totalSpent}, Number of Orders:${numberOfOrders}, Average Order Value:$${AOV}, Recent Purchase: ${JSON.stringify(
+          lastPurchase
+        )} Accepts Marketing : ${emailMarketingConsent ? `Yes` : `No`}`,
+      },
+    ];
+  } else {
+    messages = [
+      {
+        role: "system",
+        content: `Construct a detailed Customer Super Profile from the provided data of a Shopify store's customer. Analyze the customer's purchase history, product preferences, average spend, browsing behavior, email interactions, and demographic information. The profile should not only summarize these aspects but also interpret them to reveal the customer's buying habits, favored product categories, and engagement with past marketing initiatives. Highlight patterns or preferences that could inform personalized marketing strategies. Aim to create a profile that is insightful for tailoring future marketing efforts and product recommendations to this customer.`,
+      },
+      // {
+      //   role: 'user',
+      //   content: `Generate a customer behavior for Customer Name: John Doe , Region: New york USA, Joining Date:'2022-08-21T08:45:20.567Z',Order History:[{"title":"KZ Diamond Necklace","price":2000,"purchasedOn":"2023-08-01T10:00:00.000Z"},{"title":"Gold Ring","price":500,"purchasedOn":"2023-08-10T10:00:00.000Z"},{"title":"ZARA Shirts","price":100,"purchasedOn":"2023-08-20T10:00:00.000Z"},{"title":"Nike T-shirts","price":50,"purchasedOn":"2023-08-30T10:00:00.000Z"}] Total Spent:$2650, Number of Orders: 4 , Average Order Value:$662, Recent Purchase:"Nike T-shirts". Accepts Marketing : yes`,
+      // },
+      // {
+      //   role: 'assistant',
+      //   content: `Customer Mr.John Doe is from New york USA and he is interested in high-end items like KZ diamond necklace and Gold ring, which fall within the jewelry category, and fashion items because he purchased ZARA shirts, Nike T-shirts.John is therefore more drawn to the areas of jewelry and fashion and he can be tagged as "Frequent Purchaser, Recent joiner", since he bought 4 items.Mr John doe has been a very promising customer since august 21 and has spent a whopping 2650 dollars and his average order value is 662  and allows marketing recommendations.Overall,John Doe resides in USA, prefers to purchase expensive, high-quality jewelry and clothing.`,
+      // },
+      {
+        role: "user",
+        content: `Generate a customer behavior for Customer Name: ${firstName} ${lastName}, Region: ${city} ${country}, Joining Date:${joinedDate
+          .toLocaleString()
+          .slice(0, 10)},Order History:${JSON.stringify(
+          orders
+        )} Total Spent:$${totalSpent}, Number of Orders:${numberOfOrders}, Average Order Value:$${AOV}, Recent Purchase: ${JSON.stringify(
+          lastPurchase
+        )} Accepts Marketing : ${emailMarketingConsent ? `Yes` : `No`}`,
+      },
+    ];
+  }
+
+  console.log(chalk.yellow(JSON.stringify(messages)));
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-16k-0613",
+    temperature: 0.5,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+});
+
+app.get("/promotion", async (req, res) => {
+  const {  storeName, storeSuperProfile } = req.body;
+  
+const currentDate = new Date();
+const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+const nextMonth = nextMonthDate.toLocaleString('default', { month: 'long' });
+
+  const messages = [
+    {
+      role: "system",
+      content:
+        "Using the provided Store Super Profile, which includes detailed information about the store's product range, target audience, past sales trends, and customer engagement patterns, generate tailored marketing campaign suggestions for the upcoming month. Focus on strategies aimed at increasing revenue. Consider seasonal trends, upcoming holidays or events, and specific product promotions that align with the store's brand and customer preferences. Each suggestion should outline the campaign's theme, target audience, suggested promotional activities, and potential products to be highlighted.",
+    },
+    {
+      role: "user",
+      content:
+        `Create marketing campaign suggestions for the month of February for Shopify Store: '${storeName}'. Utilize the Store Super Profile: '${storeSuperProfile}', focusing on revenue growth. Include campaign themes, audience targeting, promotional activities, and product highlights suited for the store's profile and the upcoming month's trends and events.`,
+    },
+  ];
+
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.2,
+  });
+  const response = {
+    role: completion.choices[0].message.role,
+    content: completion.choices[0].message.content,
+    prompt_tokens: completion.usage.prompt_tokens,
+    completion_tokens: completion.usage.completion_tokens,
+    total_tokens: completion.usage.total_tokens,
+  };
+
+  const result = [
+    messages[0],
+    messages[1],
+    { role: response.role, content: response.content },
+  ];
+  console.log(chalk.red(JSON.stringify(result)));
+  res.send(response);
+});
 
 app.listen(3000, () => {
   console.log(`Server listening on port 3000`);

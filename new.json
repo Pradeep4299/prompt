@@ -1,0 +1,502 @@
+[
+    {
+        "Subject": "Weight Loss Awareness Month",
+        "description": "Weight Loss Awareness Month is observed in January to raise awareness about the importance of maintaining a healthy weight and promoting healthy lifestyle choices.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Blood Donor Month",
+        "description": "National Blood Donor Month is observed in January to encourage people to donate blood and raise awareness about the importance of regular blood donations.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Thank You Month",
+        "description": "National Thank You Month is observed in January to express gratitude and appreciation towards others. It is a time to acknowledge and thank people for their kindness and support.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Hobby Month",
+        "description": "National Hobby Month is observed in January to encourage people to pursue their hobbies and explore new interests. It is a time to engage in activities that bring joy and relaxation.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Tea Month",
+        "description": "National Tea Month is observed in January to celebrate the love for tea and promote its various flavors and health benefits. It is a time to enjoy and appreciate different types of teas.",
+        "Score": 5
+    },
+    {
+        "Subject": "Girl Scout Cookie Season Begins",
+        "description": "Girl Scout Cookie Season begins in January, where Girl Scouts sell cookies to raise funds for their activities and learn important entrepreneurial skills.",
+        "Score": 80
+    },
+    {
+        "Subject": "Diet Resolution Week",
+        "description": "Diet Resolution Week is observed in January to encourage people to make healthy eating resolutions and adopt better dietary habits for overall well-being.",
+        "Score": 20
+    },
+    {
+        "Subject": "Hunt For Happiness Week",
+        "description": "Hunt For Happiness Week is observed in January to promote happiness and well-being. It encourages people to engage in activities that bring joy and positivity.",
+        "Score": 10
+    },
+    {
+        "Subject": "Clean Out Your Inbox Week",
+        "description": "Clean Out Your Inbox Week is observed in January to encourage people to declutter and organize their email inboxes for better productivity and reduced digital clutter.",
+        "Score": 5
+    },
+    {
+        "Subject": "National School Choice Week",
+        "description": "National School Choice Week is observed in January to raise awareness about the importance of educational options and empower parents to choose the best schooling for their children.",
+        "Score": 10
+    },
+    {
+        "Subject": "Meat Week",
+        "description": "Meat Week is observed in January to celebrate and appreciate various types of meats. It is a time to enjoy meat-based dishes and explore different culinary traditions.",
+        "Score": 30
+    },
+    {
+        "Subject": "New Year’s Day",
+        "description": "New Year's Day is celebrated on January 1st to mark the beginning of the new year. It is a time for reflection, resolutions, and spending time with loved ones.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Hangover Day",
+        "description": "National Hangover Day is observed on January 1st to acknowledge the effects of excessive alcohol consumption during New Year's Eve celebrations and promote responsible drinking.",
+        "Score": 5
+    },
+    {
+        "Subject": "Outback Bowl",
+        "description": "The Outback Bowl is an annual college football bowl game held on New Year's Day in Tampa, Florida. It features teams from the Big Ten Conference and Southeastern Conference.",
+        "Score": 5
+    },
+    {
+        "Subject": "Rose Bowl",
+        "description": "The Rose Bowl is an annual college football bowl game held on New Year's Day in Pasadena, California. It is one of the oldest and most prestigious bowl games.",
+        "Score": 5
+    },
+    {
+        "Subject": "NHL Winter Classic",
+        "description": "The NHL Winter Classic is an annual outdoor ice hockey game held on New Year's Day. It features teams from the National Hockey League playing in an outdoor stadium.",
+        "Score": 5
+    },
+    {
+        "Subject": "Science Fiction Day",
+        "description": "Science Fiction Day is observed on January 2nd to celebrate and appreciate the genre of science fiction. It is a time to enjoy science fiction literature, movies, and TV shows.",
+        "Score": 5
+    },
+    {
+        "Subject": "Festival of Sleep Day",
+        "description": "Festival of Sleep Day is observed on January 3rd to promote the importance of a good night's sleep and encourage relaxation. It is a day to prioritize rest and rejuvenation.",
+        "Score": 5
+    },
+    {
+        "Subject": "Trivia Day",
+        "description": "Trivia Day is observed on January 4th to celebrate and enjoy trivia games and facts. It is a day to test knowledge, have fun, and learn interesting tidbits.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Bird Day",
+        "description": "National Bird Day is observed on January 5th to raise awareness about the importance of bird conservation and appreciate the beauty and diversity of birds.",
+        "Score": 5
+    },
+    {
+        "Subject": "PGA Tournament of Champions",
+        "description": "The PGA Tournament of Champions is an annual golf tournament held in Hawaii. It features a select field of golfers who have won a PGA Tour event in the previous year. The tournament marks the beginning of the PGA Tour season and showcases top-level golfing talent.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Bean Day",
+        "description": "National Bean Day is a celebration of beans, a versatile and nutritious food source. It promotes awareness of the various types of beans and their culinary uses. This day encourages people to incorporate beans into their meals and appreciate their health benefits.",
+        "Score": 5
+    },
+    {
+        "Subject": "Cuddle Up Day",
+        "description": "Cuddle Up Day is a cozy holiday that encourages people to snuggle up with their loved ones or furry friends. It's a perfect opportunity to show affection, enjoy warmth, and create a sense of comfort. Cuddling promotes bonding and relaxation, making it a delightful day for relaxation and affectionate gestures.",
+        "Score": 20
+    },
+    {
+        "Subject": "Elvis’s Birthday",
+        "description": "Elvis’s Birthday commemorates the birth anniversary of the legendary musician Elvis Presley. It is a day to celebrate his life, music, and cultural impact. Fans of Elvis Presley often organize events, tribute concerts, and gatherings to honor his legacy and enjoy his iconic songs.",
+        "Score": 5
+    },
+    {
+        "Subject": "Golden Globes",
+        "description": "The Golden Globes is an annual awards ceremony honoring outstanding achievements in film and television. It recognizes excellence in various categories, including acting, directing, and production. The event brings together renowned actors, filmmakers, and industry professionals for a glamorous night of celebration.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Bittersweet Chocolate Day",
+        "description": "National Bittersweet Chocolate Day celebrates the rich and indulgent flavor of bittersweet chocolate. It's a day to savor and appreciate the unique taste and versatility of this type of chocolate. People often enjoy bittersweet chocolate in various forms, such as bars, desserts, and beverages.",
+        "Score": 15
+    },
+    {
+        "Subject": "Houseplant Appreciation Day",
+        "description": "Houseplant Appreciation Day is dedicated to recognizing the beauty and benefits of indoor plants. It encourages people to appreciate and care for their houseplants, which can enhance indoor air quality, provide a calming environment, and add aesthetic appeal to homes and offices.",
+        "Score": 30
+    },
+    {
+        "Subject": "College Football Playoff National Championship",
+        "description": "The College Football Playoff National Championship is the culmination of the college football season. It determines the national champion among the top teams in the sport. The game showcases exceptional athleticism, strategic gameplay, and intense competition, captivating football fans across the nation.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Clean Off Your Desk Day",
+        "description": "National Clean Off Your Desk Day encourages individuals to declutter and organize their workspaces. It promotes productivity, reduces stress, and creates a more efficient work environment. This day serves as a reminder to tidy up desks, discard unnecessary items, and start the year with a clean slate.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Human Trafficking Awareness Day",
+        "description": "National Human Trafficking Awareness Day aims to raise awareness about the global issue of human trafficking. It seeks to educate the public, advocate for victims, and support efforts to combat this form of modern-day slavery. Various organizations and individuals participate in events and campaigns to shed light on this critical issue.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Take the Stairs Day",
+        "description": "National Take the Stairs Day encourages individuals to choose stairs over elevators or escalators as a simple way to incorporate physical activity into their daily routine. It promotes a healthier lifestyle, increases cardiovascular fitness, and reduces energy consumption. This day serves as a reminder to prioritize movement and make small changes for better health.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Sticker Day",
+        "description": "National Sticker Day celebrates the joy and versatility of stickers. It's a day to appreciate the colorful, adhesive creations that can be used for decoration, expression, and personalization. Stickers are popular among children and adults alike, offering a fun and creative way to add flair to various items.",
+        "Score": 5
+    },
+    {
+        "Subject": "Dress Up Your Pet Day",
+        "description": "Dress Up Your Pet Day is a lighthearted holiday that encourages pet owners to have fun and showcase their pets' personalities through costumes and accessories. It's a day to celebrate the bond between humans and their furry companions, while also providing entertainment and laughter.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Hat Day",
+        "description": "National Hat Day celebrates the wide variety of hats and their fashion and functional significance. It's a day to showcase different hat styles, express personal style, and appreciate the practicality of hats in protecting from the elements. People often wear hats of various types and share their hat-related experiences.",
+        "Score": 15
+    },
+    {
+        "Subject": "Ditch New Year’s Resolutions Day",
+        "description": "Ditch New Year’s Resolutions Day humorously acknowledges the common trend of abandoning New Year's resolutions shortly after making them. It's a day to reflect on the challenges of sticking to resolutions and embrace self-acceptance. People often share their experiences, funny anecdotes, or alternative approaches to personal growth.",
+        "Score": 5
+    },
+    {
+        "Subject": "Martin Luther King, Jr. Day",
+        "description": "Martin Luther King, Jr. Day commemorates the life and legacy of civil rights leader Martin Luther King, Jr. It is a day to honor his contributions to the advancement of racial equality, justice, and peace. Many communities organize events, marches, and educational programs to promote King's teachings and continue the fight against discrimination.",
+        "Score": 5
+    },
+    {
+        "Subject": "Winnie the Pooh Day (Author A.A. Milne’s birthday)",
+        "description": "Winnie the Pooh Day celebrates the beloved children's book character Winnie the Pooh and the birthday of author A.A. Milne. It's a day to revisit the enchanting stories, embrace the innocence of childhood, and appreciate the enduring charm of Winnie the Pooh and his friends in the Hundred Acre Wood.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Popcorn Day",
+        "description": "National Popcorn Day is a celebration of the popular snack, popcorn. It's a day to enjoy the crunchy and flavorful treat while watching movies, socializing, or simply indulging in a tasty snack. Popcorn comes in various flavors and is a versatile snack enjoyed by people of all ages.",
+        "Score": 15
+    },
+    {
+        "Subject": "Get To Know Your Customer’s Day",
+        "description": "Get To Know Your Customer’s Day is an opportunity for businesses to connect with their customers on a deeper level. It encourages building relationships, understanding customer needs, and providing personalized experiences. Businesses often organize special events, promotions, or surveys to gather feedback and enhance customer satisfaction.",
+        "Score": 5
+    },
+    {
+        "Subject": "Penguin Awareness Day",
+        "description": "Penguin Awareness Day aims to raise awareness about penguins, their habitats, and conservation efforts. It highlights the unique characteristics and challenges faced by these fascinating flightless birds. Various organizations, zoos, and individuals participate in educational activities and events to promote penguin conservation and appreciation.",
+        "Score": 10
+    },
+    {
+        "Subject": "National Cheese Lover’s Day",
+        "description": "National Cheese Lover’s Day is a celebration of all things cheese. It is a day dedicated to indulging in and appreciating the various types and flavors of cheese.",
+        "Score": 10
+    },
+    {
+        "Subject": "Sundance Film Festival begins",
+        "description": "The Sundance Film Festival is an annual event that showcases independent films from around the world. It is a platform for filmmakers to present their work and for audiences to discover unique and thought-provoking cinema.",
+        "Score": 20
+    },
+    {
+        "Subject": "National Hugging Day",
+        "description": "National Hugging Day is a day to celebrate the power of hugs and promote the importance of physical affection. It encourages people to embrace the act of hugging and spread warmth and love through simple gestures.",
+        "Score": 5
+    },
+    {
+        "Subject": "Chinese New Year",
+        "description": "Chinese New Year, also known as the Spring Festival, is a traditional Chinese holiday that marks the beginning of the lunar calendar year. It is a time for family reunions, feasts, fireworks, and various cultural activities to welcome good luck and prosperity.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Pie Day",
+        "description": "National Pie Day is a celebration of the beloved pastry dessert. It is a day to enjoy and appreciate the wide variety of sweet and savory pies, from classic apple pie to savory meat pies.",
+        "Score": 15
+    },
+    {
+        "Subject": "Community Manager Appreciation Day #CMAD",
+        "description": "Community Manager Appreciation Day, also known as #CMAD, is a day dedicated to recognizing and appreciating the hard work and dedication of community managers. It is a time to acknowledge their efforts in building and nurturing online communities.",
+        "Score": 0
+    },
+    {
+        "Subject": "Compliment Day",
+        "description": "Compliment Day is a day to spread positivity and uplift others by giving sincere compliments. It encourages people to recognize and appreciate the good qualities in others, fostering a sense of kindness and connection.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Peanut Butter Day",
+        "description": "National Peanut Butter Day celebrates the popular spread made from ground peanuts. It is a day to enjoy peanut butter in various forms, such as sandwiches, cookies, or simply by the spoonful.",
+        "Score": 5
+    },
+    {
+        "Subject": "Opposite Day",
+        "description": "Opposite Day is a playful and lighthearted day where people humorously do or say the opposite of what is expected. It is a day to have fun and embrace the unexpected.",
+        "Score": 0
+    },
+    {
+        "Subject": "Spouse’s Day",
+        "description": "Spouse’s Day is a day to celebrate and appreciate one's spouse or partner. It is a time to show love, gratitude, and support for the person who shares life's journey.",
+        "Score": 0
+    },
+    {
+        "Subject": "Chocolate Cake Day",
+        "description": "Chocolate Cake Day is a day dedicated to the indulgence of chocolate cake. It is a time to savor the rich and decadent flavors of this beloved dessert.",
+        "Score": 15
+    },
+    {
+        "Subject": "Data Privacy Day",
+        "description": "Data Privacy Day is an annual event that raises awareness about the importance of protecting personal information and promoting privacy rights. It aims to educate individuals and organizations about privacy issues and best practices for safeguarding data.",
+        "Score": 0
+    },
+    {
+        "Subject": "Fun at Work Day",
+        "description": "Fun at Work Day is a day to bring joy and laughter into the workplace. It encourages employers and employees to engage in fun activities, team-building exercises, and lighthearted moments to boost morale and create a positive work environment.",
+        "Score": 0
+    },
+    {
+        "Subject": "Winter X Games",
+        "description": "The Winter X Games is an annual extreme sports event that showcases the world's best athletes in disciplines such as snowboarding, skiing, and snowmobiling. It is a thrilling competition that pushes the boundaries of action sports.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Puzzle Day",
+        "description": "National Puzzle Day celebrates the joy of puzzles and brainteasers. It is a day to challenge the mind, solve puzzles, and appreciate the mental stimulation and entertainment they provide.",
+        "Score": 5
+    },
+    {
+        "Subject": "Backward Day",
+        "description": "Backward Day is a day to do things in reverse or opposite order. It is a fun and whimsical day where people can embrace the unexpected and break from routine.",
+        "Score": 0
+    },
+    {
+        "Subject": "Black History Month",
+        "description": "Black History Month is an annual observance in the United States and Canada that celebrates the achievements and contributions of African Americans throughout history. It is a time to honor the rich cultural heritage and recognize the struggles and triumphs of the Black community.",
+        "Score": 0
+    },
+    {
+        "Subject": "American Heart Month",
+        "description": "American Heart Month is a month-long campaign dedicated to raising awareness about heart health and promoting cardiovascular wellness. It aims to educate individuals about the risk factors for heart disease and encourage healthy lifestyle choices.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Heart Month",
+        "description": "National Heart Month is an observance that focuses on raising awareness about heart disease and promoting heart-healthy habits. It aims to educate individuals about the importance of cardiovascular health and encourage preventive measures.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Weddings Month",
+        "description": "National Weddings Month is a month-long celebration of love and marriage. It is a time to honor the institution of marriage, celebrate wedding traditions, and provide inspiration for couples planning their special day.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Cherry Month",
+        "description": "National Cherry Month is a celebration of cherries and their significance. It is observed during the month of February, and it promotes the consumption of cherries and highlights their health benefits.",
+        "Score": 20
+    },
+    {
+        "Subject": "Eating Disorder Awareness Week",
+        "description": "Eating Disorder Awareness Week is a dedicated week to raise awareness about eating disorders, their prevention, and treatment. It aims to educate the public, support individuals affected by eating disorders, and promote a healthy body image.",
+        "Score": 10
+    },
+    {
+        "Subject": "New York Fashion Week",
+        "description": "New York Fashion Week is a major event in the fashion industry. It showcases the latest collections of renowned designers and sets the trends for the upcoming seasons. Fashion enthusiasts, designers, models, and media professionals gather to witness the glamorous runway shows.",
+        "Score": 100
+    },
+    {
+        "Subject": "Freelance Writers Appreciation Week",
+        "description": "Freelance Writers Appreciation Week is a week-long celebration dedicated to recognizing and appreciating the work of freelance writers. It acknowledges their contributions to various industries and highlights the importance of their skills and creativity.",
+        "Score": 5
+    },
+    {
+        "Subject": "Condom Week",
+        "description": "Condom Week is an annual event that aims to promote safe sex practices and raise awareness about the importance of using condoms to prevent sexually transmitted infections (STIs) and unintended pregnancies. It provides education, resources, and encourages open discussions about sexual health.",
+        "Score": 5
+    },
+    {
+        "Subject": "Random Acts of Kindness Week",
+        "description": "Random Acts of Kindness Week is a week-long observance that encourages individuals to perform acts of kindness towards others. It promotes compassion, empathy, and making a positive impact on people's lives through simple gestures of kindness.",
+        "Score": 10
+    },
+    {
+        "Subject": "International Flirting Week",
+        "description": "International Flirting Week is a playful and lighthearted observance that celebrates the art of flirting. It encourages people to engage in harmless flirting, boost their confidence, and create connections with others in a fun and flirtatious manner.",
+        "Score": 10
+    },
+    {
+        "Subject": "Milan Fashion Week",
+        "description": "Milan Fashion Week is a prestigious fashion event held in Milan, Italy. It showcases the latest collections from renowned Italian and international designers. The event attracts fashion industry professionals, celebrities, and fashion enthusiasts from around the world.",
+        "Score": 100
+    },
+    {
+        "Subject": "London Fashion Week",
+        "description": "London Fashion Week is a prominent fashion event held in London, United Kingdom. It showcases the latest trends and collections from established and emerging designers. The event includes runway shows, presentations, and industry networking opportunities.",
+        "Score": 100
+    },
+    {
+        "Subject": "Paris Fashion Week",
+        "description": "Paris Fashion Week is one of the most prestigious fashion events in the world. It takes place in Paris, France, and showcases the latest haute couture and ready-to-wear collections from top designers. The event attracts fashion industry professionals, celebrities, and fashion enthusiasts.",
+        "Score": 100
+    },
+    {
+        "Subject": "National Freedom Day",
+        "description": "National Freedom Day is a commemorative day that celebrates the signing of the 13th Amendment to the United States Constitution, which abolished slavery. It serves as a reminder of the importance of freedom, equality, and the ongoing fight against injustice.",
+        "Score": 5
+    },
+    {
+        "Subject": "Groundhog Day",
+        "description": "Groundhog Day is a traditional holiday observed on February 2nd. According to folklore, if a groundhog emerges from its burrow and sees its shadow, it signifies six more weeks of winter. It is a lighthearted event that attracts attention and curiosity.",
+        "Score": 5
+    },
+    {
+        "Subject": "Bubble Gum Day",
+        "description": "Bubble Gum Day is a fun and playful observance that encourages people to enjoy and celebrate bubble gum. It is a day to indulge in chewing gum, blowing bubbles, and embracing the joy and nostalgia associated with this popular confectionery.",
+        "Score": 5
+    },
+    {
+        "Subject": "World Cancer Day",
+        "description": "World Cancer Day is an international day dedicated to raising awareness about cancer, its prevention, detection, and treatment. It aims to inspire action, promote research, and support individuals and communities affected by cancer.",
+        "Score": 5
+    },
+    {
+        "Subject": "Give Kids a Smile Day",
+        "description": "Give Kids a Smile Day is an annual event that provides free dental care and education to children in need. It aims to improve oral health, raise awareness about dental issues, and ensure that all children have access to proper dental care.",
+        "Score": 5
+    },
+    {
+        "Subject": "Grammy's",
+        "description": "The Grammy Awards, also known as the Grammys, is an annual music awards ceremony that honors outstanding achievements in the music industry. It recognizes artists, songwriters, producers, and other professionals for their contributions to the world of music.",
+        "Score": 5
+    },
+    {
+        "Subject": "World Nutella Day",
+        "description": "World Nutella Day is a day dedicated to celebrating Nutella, a popular chocolate-hazelnut spread. It encourages people to enjoy Nutella in various ways, such as spreading it on toast, using it in recipes, or simply indulging in its deliciousness.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Weatherperson’s Day",
+        "description": "National Weatherperson's Day is a day to honor and appreciate weather forecasters and meteorologists. It recognizes their important role in providing weather information, forecasts, and warnings to help keep people safe and informed.",
+        "Score": 5
+    },
+    {
+        "Subject": "National Chopsticks Day",
+        "description": "National Chopsticks Day celebrates the traditional Asian eating utensils known as chopsticks. It promotes the cultural significance of chopsticks, their usage, and encourages people to try using them while enjoying Asian cuisine.",
+        "Score": 5
+    },
+    {
+        "Subject": "Send a Card to a Friend Day #SendACardToAFriendDay",
+        "description": "Send a Card to a Friend Day is a day dedicated to sending heartfelt cards to friends to show appreciation, love, or simply to brighten their day. It encourages people to reconnect, express gratitude, and strengthen friendships through the act of sending cards.",
+        "Score": 5
+    },
+    {
+        "Subject": "Oscar Nomination Announcement",
+        "description": "The Oscar Nomination Announcement is an annual event where the nominees for the prestigious Academy Awards are revealed. It is an exciting time for the film industry and movie enthusiasts as they eagerly anticipate the recognition of outstanding cinematic achievements.",
+        "Score": 10
+    },
+    {
+        "Subject": "Boy Scout’s Day",
+        "description": "Boy Scout's Day is a celebration of the Boy Scouts of America, an organization that promotes character development, leadership skills, and outdoor activities for young boys. It is a day to honor the contributions of Boy Scouts and recognize their commitment to community service and personal growth.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Pizza Day",
+        "description": "National Pizza Day is a day dedicated to the beloved Italian dish, pizza. It is a celebration of the various flavors and styles of pizza, from classic Margherita to creative gourmet combinations. People indulge in their favorite pizzas and share their love for this universally enjoyed food.",
+        "Score": 20
+    },
+    {
+        "Subject": "Umbrella Day",
+        "description": "Umbrella Day is a day to appreciate and recognize the importance of umbrellas in protecting us from rain and sun. It is a reminder of the practicality and usefulness of this everyday item. On this day, people may share umbrella-related stories, facts, or even showcase unique umbrella designs.",
+        "Score": 0
+    },
+    {
+        "Subject": "Make a Friend Day",
+        "description": "Make a Friend Day is a day dedicated to fostering new friendships and strengthening existing ones. It encourages people to reach out, connect, and engage with others in meaningful ways. It is an opportunity to spread kindness, build social connections, and create a more inclusive and friendly community.",
+        "Score": 5
+    },
+    {
+        "Subject": "Lincoln’s Birthday",
+        "description": "Lincoln's Birthday is a commemoration of the birth anniversary of Abraham Lincoln, the 16th President of the United States. It is a day to honor his leadership, contributions to the nation, and his role in abolishing slavery. Various events and ceremonies may take place to remember and reflect upon his legacy.",
+        "Score": 0
+    },
+    {
+        "Subject": "Superbowl Sunday",
+        "description": "Superbowl Sunday is the day of the annual championship game of the National Football League (NFL). It is one of the biggest sporting events in the United States, where millions of people gather to watch the game, enjoy halftime performances, and indulge in food and drinks. It has become a cultural phenomenon beyond football, with commercials and social gatherings being a significant part of the experience.",
+        "Score": 0
+    },
+    {
+        "Subject": "Valentine’s Day",
+        "description": "Valentine.s Day is a day dedicated to celebrating love and affection. It is a time to express romantic feelings towards partners, friends, and family through gestures like exchanging gifts, cards, or spending quality time together. The day is associated with symbols like hearts, roses, and Cupid, and is often seen as an opportunity to show appreciation and affection to loved ones.",
+        "Score": 30
+    },
+    {
+        "Subject": "Susan B. Anthony’s Birthday",
+        "description": "Susan B. Anthony.s Birthday commemorates the birth anniversary of Susan B. Anthony, a prominent figure in the women's suffrage movement. It is a day to honor her tireless efforts in advocating for women's rights, including the right to vote. The day may involve discussions, events, or actions that promote gender equality and women's empowerment.",
+        "Score": 0
+    },
+    {
+        "Subject": "Singles Awareness Day",
+        "description": "Singles Awareness Day, also known as S.A.D., is a day dedicated to celebrating and embracing the single life. It is an opportunity for single individuals to focus on self-love, self-care, and personal growth. The day may involve activities that promote independence, self-reflection, and appreciation of the single journey.",
+        "Score": 10
+    },
+    {
+        "Subject": "Random Acts of Kindness Day",
+        "description": "Random Acts of Kindness Day is a day to encourage and inspire acts of kindness towards others. It promotes the idea of making the world a better place through small, unexpected acts of generosity, compassion, and empathy. People may engage in various acts of kindness, such as helping strangers, volunteering, or spreading positivity.",
+        "Score": 5
+    },
+    {
+        "Subject": "Drink Wine Day",
+        "description": "Drink Wine Day is a day to appreciate and enjoy the art of wine tasting and the pleasures of drinking wine. It celebrates the rich history, diverse flavors, and cultural significance of wine. Wine enthusiasts may gather to share their favorite wines, learn about different varieties, or simply savor a glass of their preferred vintage.",
+        "Score": 10
+    },
+    {
+        "Subject": "Love Your Pet Day",
+        "description": "Love Your Pet Day is a day to show extra love, care, and appreciation for our beloved pets. It is an opportunity to pamper them, spend quality time together, and acknowledge the joy and companionship they bring to our lives. People may engage in activities like pet grooming, special treats, or outdoor adventures with their furry friends.",
+        "Score": 5
+    },
+    {
+        "Subject": "Presidents Day",
+        "description": "Presidents Day is a federal holiday in the United States that honors and celebrates the country's presidents, past and present. It is a day to reflect on the leadership, achievements, and contributions of the nation's leaders. Various events, parades, or educational activities may take place to commemorate this day.",
+        "Score": 0
+    },
+    {
+        "Subject": "Fat Tuesday/Mardi Gras",
+        "description": "Fat Tuesday, also known as Mardi Gras, is a festive celebration that takes place before the Christian season of Lent. It is a day of indulgence, feasting, and revelry, often associated with colorful parades, costumes, and lively music. People enjoy traditional foods, participate in carnival-like activities, and embrace the festive spirit.",
+        "Score": 0
+    },
+    {
+        "Subject": "Washington’s Birthday",
+        "description": "Washington's Birthday, also known as Presidents Day, is a federal holiday in the United States that honors the first President of the country, George Washington. It is a day to commemorate his birth and reflect on his significant contributions to the nation. The day may involve ceremonies, historical discussions, or events that highlight Washington's legacy.",
+        "Score": 0
+    },
+    {
+        "Subject": "Margarita Day",
+        "description": "Margarita Day is a day dedicated to celebrating the popular cocktail, the Margarita. It is a time to enjoy this refreshing drink made with tequila, lime juice, and orange liqueur. Margarita enthusiasts may gather at bars, restaurants, or host their own parties to savor different variations of this classic cocktail.",
+        "Score": 10
+    },
+    {
+        "Subject": "Walk Your Dog Day",
+        "description": "Walk Your Dog Day is a day to promote the health and well-being of dogs through regular exercise. It encourages dog owners to take their furry companions for walks, hikes, or other outdoor activities. The day also emphasizes the importance of responsible pet ownership and strengthening the bond between humans and their canine friends.",
+        "Score": 5
+    },
+    {
+        "Subject": "Ash Wednesday",
+        "description": "Ash Wednesday marks the beginning of the Christian season of Lent. It is a day of repentance, reflection, and preparation for Easter. Many Christians attend church services where ashes are applied to their foreheads in the shape of a cross, symbolizing mortality and the need for spiritual renewal.",
+        "Score": 0
+    },
+    {
+        "Subject": "National Tortilla Chip Day",
+        "description": "National Tortilla Chip Day is a day to celebrate the popular snack, tortilla chips. It is a time to enjoy these crispy, corn-based chips often served with salsa, guacamole, or other dips. People may gather for parties, cookouts, or simply indulge in their favorite tortilla chip flavors and combinations.",
+        "Score": 10
+    }
+]

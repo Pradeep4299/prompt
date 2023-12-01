@@ -1,19 +1,7 @@
-[{
-    "id":1,
-    "total_price":250
-},{
-    "id":2,
-    "total_price":1400
-},{
-    "id":3,
-    "total_price":800
-},{
-    "id":4,
-    "total_price":300
-},{
-    "id":2,
-    "total_price":1400
-},{
-    "id":6,
-    "total_price":300
-}]
+{
+    "role": "assistant",
+    "content": "Fashion Tracks is a trendy shop located in New York City, USA. They offer a variety of fashion and clothing products including Classic Varsity Top, Classic Leather Jacket, Chequered Red Shirt, Leather Boxers, and Super Thick Hoody. Explore their collection at www.fashiontracks.myshopify.com. The shop specializes in fashion and clothing categories, with a total revenue of $1500. The average order value is $700, and the average price of products is $600. The default marketing tone used by Fashion Tracks is 'Casual and formal', targeting the GenZ age group. Excluded keywords include 'best in the world, cool, Big sale', while included keywords are 'Style Symphony, Boutique Bliss, Luxe Looks'.",
+    "prompt_tokens": 766,
+    "completion_tokens": 150,
+    "total_tokens": 916
+}

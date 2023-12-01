@@ -1,7 +1,7 @@
 {
-  "role": "assistant",
-  "content": "{\n  \"shopName\": \"Tagbot Gaming\",\n  \"subject\": \"🎄 Get Ready for the Great American Savings Fest, Pradeep Kumar! 🎉\",\n  \"body\": \"🎮🔥 Hey Pradeep Kumar, we're excited to announce the Great American Savings Fest starting on December 25th! Get ready for amazing deals on gaming accessories and tech products. 🎁🎉\n\n🖥️ Upgrade your gaming setup with our top picks: Gaming Chairs, Gaming Monitors, and Gaming Controllers. 🎮🎧\n\n🌟 Don't miss out on the latest gaming consoles and popular video games! 🎮🎮\n\n🎄🎁 Use coupon code **FIRST20** for 20% off your first purchase. Shop now at www.tagbotgaming.com. 🎄🎁\n\nHappy gaming, Pradeep Kumar! 🚀\n\nBest regards,\nTagbot Gaming Shop\"\n}",
-  "prompt_tokens": 726,
-  "completion_tokens": 205,
-  "total_tokens": 931
+    "role": "assistant",
+    "content": "Customer John Smith is from Barcelona, Spain. He joined on October 11, 2022, and has made a total of 10 orders with an average order value of $402. His recent purchase was the Logitech g402 Gaming mouse. Based on his order history, John is interested in gaming accessories and electronics. He has purchased items such as gaming mice, keyboards, headsets, speakers, and a laptop. John has spent a total of $4020 on his orders. He does not accept marketing. Overall, John Smith is a tech-savvy customer from Barcelona who is interested in gaming accessories and electronics.",
+    "prompt_tokens": 706,
+    "completion_tokens": 126,
+    "total_tokens": 832
 }
