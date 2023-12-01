@@ -2,3 +2,4 @@ node_modules
 .env
 events.json
 events.js
+subscription_object.js
