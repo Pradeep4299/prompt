@@ -1377,8 +1377,7 @@ app.get("/score", async (req, res) => {
 
 app.get("/category", async (req, res) => {
   const shopifyStore = "jinx2g";
-  const accessToken = "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";
-
+const accessToken=process.env.SHOPIFY_ACCESS_TOKEN
   const collectUrl = `https://${shopifyStore}.myshopify.com/admin/api/2023-10/collects.json`;
 
   const collectOptions = {
